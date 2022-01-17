@@ -24,14 +24,14 @@ exports.devServer = () => ({
 
 exports.page = ({ title }) => ({
   plugins: [new MiniHtmlWebpackPlugin({
-    publicPath: '/',
+    publicPath: '',
     context: {
       title,
       head: `
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <link rel="icon" type="image/png" href="/favicon.png">
-        <link rel="stylesheet" href="/global.css">
-        <script src="/olm/olm.js"></script>`,
+        <link rel="icon" type="image/png" href="favicon.png">
+        <link rel="stylesheet" href="global.css">
+        <script src="olm/olm.js"></script>`,
     },
   })]
 })
