@@ -83,6 +83,13 @@ limitations under the License.
         await listing.newFolder();
     }
 
+    export async function newFile() {
+        if (!listing) {
+            return;
+        }
+        await listing.newFile();
+    }
+
     export function fileUpload() {
         if (!fileSelect) {
             return;

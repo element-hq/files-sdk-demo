@@ -160,6 +160,12 @@ limitations under the License.
         addMenu.setOpen(false);
         browser.newFolder();
     }
+
+    function newFile() {
+        addMenu.setOpen(false);
+        browser.newFile();
+    }
+
     function fileUpload() {
         addMenu.setOpen(false);
         browser.fileUpload();
@@ -203,6 +209,10 @@ limitations under the License.
                                 <Text>New folder</Text>
                             </Item>
                             <Separator />
+                            <Item on:SMUI:action={() => newFile()}>
+                                <Graphic class="material-icons-round">insert_drive_file</Graphic>
+                                <Text>New File</Text>
+                            </Item>
                             <Item on:SMUI:action={() => fileUpload()}>
                                 <Graphic class="material-icons-round">upload_file</Graphic>
                                 <Text>File upload</Text>

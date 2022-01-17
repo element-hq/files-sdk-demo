@@ -37,6 +37,7 @@ limitations under the License.
     import { JsonView } from '@zerodevx/svelte-json-view'
     import EncryptionKeyRestoreDialog from "../EncryptionKeyRestoreDialog.svelte";
     import EncryptionKeyCreateDialog from '../EncryptionKeyCreateDialog.svelte';
+    import ViewFileDialog from '../ViewFileDialog.svelte';
 
     export let clientManager: ClientManager;
     export let directory: IFolderEntry;
@@ -109,7 +110,28 @@ limitations under the License.
         }, `Failed to delete file ${file.getName()}`);
     }
 
+    let viewFileDialog: ViewFileDialog;
+    let viewFileTimer: NodeJS.Timeout;
+
+    async function viewFile(e: CustomEvent | undefined, file: IFileEntry) {
+        // exclude non-single clicks:
+        if (e?.detail === 1) {
+            // use timeout to deduplicate double click (download file) event:
+            viewFileTimer = setTimeout(async () => {
+                fileMenu.setOpen(false);
+
+                await viewFileDialog.open(file);
+            }, 200);
+        } else if (!e) {
+            fileMenu.setOpen(false);
+            await viewFileDialog.open(file);
+        }
+    }
+
     async function downloadFile(file: IFileEntry) {
+        if (viewFileTimer) {
+            clearTimeout(viewFileTimer);
+        }
         fileMenu.setOpen(false);
         if (await errorWrapper(async () => {
             let start: any | undefined;
@@ -160,6 +182,15 @@ limitations under the License.
         }
     }
 
+    export async function newFile() {
+        const name = await textfieldDialog.open('New file', 'Untitled.md', 'File name', 'Create', itemNameValidator(undefined, subdirectories, files));
+        if (name) {
+            await errorWrapper(async () => {
+                await directory.addFile(name, { data: new ArrayBuffer(0), size: 0, mimetype: 'text/plain' });
+            }, `Failed to create file ${name}`);
+        }
+    }
+
     let textfieldDialog: TextfieldDialog;
     let selectedFile: IFileEntry;
     let fileMenu: MenuSurfaceComponentDev;
@@ -181,6 +212,16 @@ limitations under the License.
         }
     }
 
+    async function copyFile(file: IFileEntry) {
+        fileMenu.setOpen(false);
+        const name = await textfieldDialog.open('Copy file', `Copy of ${file.getName()}`, 'File name', 'Copy', itemNameValidator(file.getName(), subdirectories, files));
+        if (name) {
+            await errorWrapper(async () => {
+                await file.copyTo(file.getParent()!, name);
+            }, `Failed to copy file ${file.getName()}`);
+        }
+    }
+
     let selectedFolder: IFolderEntry;
     let folderMenu: MenuSurfaceComponentDev;
 
@@ -198,6 +239,16 @@ limitations under the License.
             await errorWrapper(async () => {
                 await folder.rename(name);
             }, `Failed to rename folder ${folder.getName()}`);
+        }
+    }
+
+    async function copyFolder(folder: IFolderEntry) {
+        folderMenu.setOpen(false);
+        const name = await textfieldDialog.open('Copy folder', `Copy of ${folder.getName()}`, 'Folder name', 'Copy', itemNameValidator(folder.getName(), subdirectories, files));
+        if (name) {
+            await errorWrapper(async () => {
+                await folder.copyTo(folder.getParent()!, name);
+            }, `Failed to copy folder ${folder.getName()}`);
         }
     }
 
@@ -289,20 +340,17 @@ limitations under the License.
 
 <EncryptionKeyCreateDialog {clientManager} open={keyBackupCreateDialog} closed={() => keyBackupCreateDialogClosed()}/>
 
+<ViewFileDialog bind:this={viewFileDialog} />
+
 <TextfieldDialog bind:this={textfieldDialog} />
 
 <MenuSurface bind:this={fileMenu} anchor={false} quickOpen>
     {#if selectedFile}
         <List dense>
-            <Item on:SMUI:action={() => renameFile(selectedFile)}>
-                <Graphic class="material-icons-round">drive_file_rename_outline</Graphic>
-                <Text>Rename</Text>
+            <Item on:SMUI:action={(e) => viewFile(undefined, selectedFile)}>
+                <Graphic class="material-icons-round">file_open</Graphic>
+                <Text>Preview</Text>
             </Item>
-            <Item on:SMUI:action={() => setLocked(selectedFile, !selectedFile.isLocked())}>
-                <Graphic class="material-icons-round">{selectedFile.isLocked() ? 'lock_open' : 'lock'}</Graphic>
-                <Text>{selectedFile.isLocked() ? 'Unlock' : 'Lock'}</Text>
-            </Item>
-            <Separator />
             <Item on:SMUI:action={() => downloadFile(selectedFile)}>
                 <Graphic class="material-icons-round">file_download</Graphic>
                 <Text>Download</Text>
@@ -310,6 +358,19 @@ limitations under the License.
             <Item on:SMUI:action={() => viewHistoryFile(selectedFile)}>
                 <Graphic class="material-icons-round">history</Graphic>
                 <Text>Version history</Text>
+            </Item>
+            <Separator />
+            <Item on:SMUI:action={() => renameFile(selectedFile)}>
+                <Graphic class="material-icons-round">drive_file_rename_outline</Graphic>
+                <Text>Rename</Text>
+            </Item>
+            <Item on:SMUI:action={() => copyFile(selectedFile)}>
+                <Graphic class="material-icons-round">file_copy</Graphic>
+                <Text>Make a copy</Text>
+            </Item>
+            <Item on:SMUI:action={() => setLocked(selectedFile, !selectedFile.isLocked())}>
+                <Graphic class="material-icons-round">{selectedFile.isLocked() ? 'lock_open' : 'lock'}</Graphic>
+                <Text>{selectedFile.isLocked() ? 'Unlock' : 'Lock'}</Text>
             </Item>
             <Separator />
             <Item on:SMUI:action={() => removeFile(selectedFile)}>
@@ -332,6 +393,10 @@ limitations under the License.
             <Item on:SMUI:action={() => renameFolder(selectedFolder)}>
                 <Graphic class="material-icons-round">drive_file_rename_outline</Graphic>
                 <Text>Rename</Text>
+            </Item>
+            <Item on:SMUI:action={() => copyFolder(selectedFolder)}>
+                <Graphic class="material-icons-round">content_copy</Graphic>
+                <Text>Make a copy</Text>
             </Item>
             <Separator />
             <Item on:SMUI:action={() => removeDir(selectedFolder)}>
@@ -358,7 +423,7 @@ limitations under the License.
             Loading...
         {/if}
         {#each subdirectories as dir}
-            <Row class="cursor-pointer" on:dblclick:preventDefault={() => router.show(`/directory/${dir.id}`)}  on:contextmenu:preventDefault={(e) => openFolderMenu(dir, e)} on:mousedown:preventDefault={() => {}}>
+            <Row class="cursor-pointer" on:dblclick:preventDefault={() => router.show(`/directory/${dir.id}`)} on:contextmenu:preventDefault={(e) => openFolderMenu(dir, e)} on:mousedown:preventDefault={() => {}}>
                 <Cell checkbox>
                     <Checkbox
                         bind:group={selected}
@@ -389,7 +454,7 @@ limitations under the License.
                         valueKey={file.id}
                     />
                 </Cell>
-                <Cell>
+                <Cell on:click:preventDefault={(e) => viewFile(e, file)}>
                     <div class="name-col">
                         <div>
                             <span class="material-icons-round">{fileIcon(file.getName())}</span>
