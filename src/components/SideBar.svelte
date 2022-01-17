@@ -15,6 +15,7 @@ limitations under the License.
 -->
 
 <script lang="ts">
+    import router from 'page';
     import List, { Item, Graphic, Text, Separator } from '@smui/list';
     import type { IFolderEntry } from 'matrix-files-sdk';
     import { onDestroy, onMount } from 'svelte';
@@ -47,18 +48,18 @@ limitations under the License.
 
 {#if isLoggedIn}
 <List class="sidebar">
-    <Item href="/#!/home" selected={hash === '#!/home'}>
+    <Item on:click:preventDefault={() => router.show('/home')} href="#" selected={hash === '#!/home'}>
         <Graphic class="material-icons-round">home</Graphic>
         <Text>Home</Text>
     </Item>
     {#each workspaces as workspace}
-        <Item href="/#!/directory/{workspace.id}" selected={hash.startsWith(`#!/directory/${workspace.id}`)}>
+        <Item on:click:preventDefault={() => router.show(`/directory/${workspace.id}`)} href="#" selected={hash.startsWith(`#!/directory/${workspace.id}`)}>
             <Graphic class="material-icons-round">work</Graphic>
             <Text>{workspace.getName()}</Text>
         </Item>
     {/each}
     <Separator />
-    <Item href="/#!/shared">
+    <Item on:click:preventDefault={() => router.show('/shared')} href="#" selected={hash.startsWith('#!/shared')}>
         <Graphic class="material-icons-round">people_outline</Graphic>
         <Text>Shared with me</Text>
     </Item>

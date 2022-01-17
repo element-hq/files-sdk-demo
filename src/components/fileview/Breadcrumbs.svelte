@@ -15,6 +15,8 @@ limitations under the License.
 -->
 
 <script lang="ts">
+    import router from 'page';
+    import Button from "@smui/button";
     import type { IEntry, IFolderEntry } from "matrix-files-sdk";
 
     export let directory!: IFolderEntry | undefined;
@@ -37,10 +39,10 @@ limitations under the License.
 </script>
 
 <div>
-    <a href="/#!/home">Home</a>
+    <Button on:click:preventDefault={() => router.show('/home')} href="#" variant="text">Home</Button>
     {#each linkTree as item}
         <span class="material-icons-round">chevron_right</span>
-        <a href="/#!/directory/{item.id}">{item.getName()}</a>
+        <Button on:click:preventDefault={() => router.show(`/directory/${item.id}`)} href="#" variant="text">{item.getName()}</Button>
     {/each}
 </div>
 

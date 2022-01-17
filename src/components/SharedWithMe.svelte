@@ -88,7 +88,7 @@ limitations under the License.
 </script>
 
 <div>
-    <a href="/#!/shared">Shared with me</a>
+    <Button on:click:preventDefault={() => router.show('/shared')} href="#" variant="text">Shared with me</Button>
 </div>
 
 <DataTable style="width: 100%; border: none;">

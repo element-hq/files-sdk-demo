@@ -15,6 +15,7 @@ limitations under the License.
 -->
 
 <script lang="ts">
+    import router from 'page';
     import type { ClientManager } from "../../ClientManager";
     import Textfield from "@smui/textfield";
     import HelperText from "@smui/textfield/helper-text";
@@ -71,7 +72,7 @@ limitations under the License.
         </Button>
         <p>
             Already have an account?
-            <Button href="/#!/signin">
+            <Button on:click:preventDefault={() => router.show('/signin')} href="#">
                 <Label>Sign in</Label>
             </Button>
         </p>

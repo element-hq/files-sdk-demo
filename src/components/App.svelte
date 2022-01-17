@@ -149,7 +149,7 @@ limitations under the License.
 
     router('/*', () => page = Oops);
 
-    router.base('/#!');
+    router.base('#!');
     router({ hashbang: true });
     router.start();
 
@@ -193,9 +193,7 @@ limitations under the License.
     <div class="drawer-container">
         <Drawer>
             <Content class="drawer-content">
-                <a href="/#!/home">
-                    <img src="/logo.svg" alt="Files SDK Demo" style="margin-bottom: 20px; width: 206px;"/>
-                </a>
+                <img src="logo.svg" alt="Files SDK Demo" style="margin-bottom: 20px; width: 206px;"/>
                 {#if isLoggedIn}
                     <Button on:click={e => newClicked(e)} style="left: 6px; border-radius: 21px; min-width: 108px; margin-bottom: 16px;" variant="unelevated">
                         <Icon class="material-icons-round">add</Icon>
@@ -245,7 +243,7 @@ limitations under the License.
                     >
                         <Icon class="material-icons-round" slot="leadingIcon">search</Icon>
                     </Textfield>
-                    <IconButton href="#!/settings"><Icon class="material-icons-round">settings</Icon></IconButton>
+                    <IconButton on:click:preventDefault={() => router.show('/settings')} href="#"><Icon class="material-icons-round">settings</Icon></IconButton>
                 </div>
             {/if}
             {#if page}
