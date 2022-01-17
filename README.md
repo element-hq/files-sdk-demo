@@ -1,5 +1,7 @@
 # Demo: web client for matrix-files-sdk
 
+[Live demo](https://vector-im.github.io/files-sdk-demo)
+
 ## Get started
 
 Install the dependencies...
