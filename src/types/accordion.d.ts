@@ -16,6 +16,7 @@ limitations under the License.
 
 declare module 'svelte-accordion' {
   import type { SvelteComponent } from "svelte";
-  export default class Accordion extends SvelteComponent {};
-  export class Section extends SvelteComponent {};
+  export default class Accordion extends SvelteComponent {
+    static Section: SvelteComponent;
+  };
 }

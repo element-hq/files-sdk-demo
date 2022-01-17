@@ -33,7 +33,7 @@ limitations under the License.
     import EntryCreatedBy from "../EntryCreatedBy.svelte";
     import IconButton from "@smui/icon-button";
     import { Icon } from '@smui/button';
-    import Accordion, { Section } from "svelte-accordion";
+    import Accordion from "svelte-accordion";
     import { JsonView } from '@zerodevx/svelte-json-view'
     import EncryptionKeyRestoreDialog from "../EncryptionKeyRestoreDialog.svelte";
     import EncryptionKeyCreateDialog from '../EncryptionKeyCreateDialog.svelte';
@@ -551,27 +551,27 @@ limitations under the License.
             </p>
             <hr>
             <Accordion>
-                <Section title={'Index event source'}>
+                <Accordion.Section title={'Index event source'}>
                     {#if viewSourceBranch.branch.indexEvent}
                         <JsonView class="monospace" json={viewSourceBranch.branch.indexEvent.event} />
                     {:else}
                         Not found
                     {/if}
-                </Section>
-                <Section title={'Decrypted file event source'}>
+                </Accordion.Section>
+                <Accordion.Section title={'Decrypted file event source'}>
                     {#if viewSourceFileEvent}
                         <JsonView class="monospace" json={viewSourceFileEvent.getClearContent()} />
                     {:else}
                         Not found
                     {/if}
-                </Section>
-                <Section title={'Original file event source'}>
+                </Accordion.Section>
+                <Accordion.Section title={'Original file event source'}>
                     {#if viewSourceFileEvent}
                         <JsonView class="monospace" json={viewSourceFileEvent.event} />
                     {:else}
                         Not found
                     {/if}
-                </Section>
+                </Accordion.Section>
             </Accordion>
         </Content>
     {/if}
