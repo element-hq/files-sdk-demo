@@ -3696,10 +3696,10 @@ markdown-table@^2.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.1.tgz#6d3e7141f7c99d3e04ce44dad20ab6168240d0ff"
 
-matrix-files-sdk@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-1.0.3.tgz#b57d6560b4227982d1e39db300838e654a9710b3"
-  integrity sha512-bRcaIfNwj2OL56QbxZYsYc/2Fw41N1OBAGWHabHO9sNizZyerkDuiVdYGOoc3M3VMAutmvHUbKai9MZayzhx9w==
+matrix-files-sdk@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-1.1.2.tgz#1861cbbd640c92fad8dce3e2704175951e584a87"
+  integrity sha512-qkh/srYYLtzHepTHy9cfpRPeROU90T+nm0nk9Ae5JaGy15U+B3hqTGIx1i2ciDnOQMX/jJN746hIfR4XjMODtQ==
   dependencies:
     axios "^0.24.0"
     events "^3.3.0"

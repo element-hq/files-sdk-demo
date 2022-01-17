@@ -28,6 +28,7 @@ limitations under the License.
     import type { ArrayBufferBlob } from 'matrix-files-sdk/dist/utils';
     import { toasts } from 'svelte-toasts';
     import { Skeleton } from 'svelte-loading-skeleton';
+    import { createObjectUrl } from '../blob';
 
     const plugins = [
         gfm(),
@@ -67,6 +68,15 @@ limitations under the License.
         return new TextDecoder().decode(buf);
     }
 
+    function ab2base64(blob: ArrayBufferBlob) {
+        return new Promise<string> ((resolve,reject)=> {
+            const reader = new FileReader();
+            reader.readAsDataURL(new Blob([blob.data], { type: blob.mimetype }));
+            reader.onload = () => resolve(reader.result?.toString() || '');
+            reader.onerror = error => reject(error);
+        });
+    }
+
     export async function open(_file: IFileEntry): Promise<boolean> {
         _open = true;
         file = _file;
@@ -96,14 +106,8 @@ limitations under the License.
         }, `Failed to download ${file.getName()} for preview`);
 
         if (blob) {
-            var b = new Blob([blob.data])
-            var reader = new FileReader();
-            reader.onload = function(event){
-                dataUrl = event.target?.result as string;
-            };
-
-            reader.readAsDataURL(b);
-
+            dataUrl = await ab2base64(blob);
+            //`data:${blob.mimetype};base64,${btoa(blob.data)}`;
             if (blob.mimetype === 'text/markdown' || extension === 'md') {
                 markdownValue = ab2str(blob.data);
                 allowEditing = true;
@@ -145,7 +149,7 @@ limitations under the License.
 
     function getObjectUrl() {
         if (!objectUrl && blob) {
-            objectUrl = URL.createObjectURL(new Blob([blob.data], { type: blob.mimetype }));
+            objectUrl = createObjectUrl(blob);
         }
 
         return objectUrl;
@@ -155,7 +159,7 @@ limitations under the License.
 <Dialog
     bind:open={_open}
     on:MDCDialog:closed={closeHandler}
-    surface$style="width: 850px; max-width: calc(100vw - 32px);"
+    surface$style="width: calc(100vw - 100px); max-width: calc(100vw - 32px); height: calc(100vh - 100px);"
 >
     {#if file}
         <Title style="font-size: 24px; font-weight: 600;">{file.getName()}</Title>
@@ -164,10 +168,7 @@ limitations under the License.
                 {#if blob.mimetype.startsWith('image') || ['png', 'svg', 'jpg', 'jpeg', 'gif'].includes(extension)}
                     <img src={dataUrl} alt={file.getName()} style="max-width: 100%; max-height: 100%;">
                 {:else if blob.mimetype === 'application/pdf' || extension === 'pdf'}
-                    <object width="100%" height="auto" type="application/pdf" data={getObjectUrl()} title={file.getName()}>
-                        <p>To preview your document please install a PDF reader for your browser such as <a oa-on="adobe reader" href="http://get.adobe.com/reader">Adobe Reader</a></p>
-                        <embed src={getObjectUrl()} width="100%" height="auto" type="application/pdf" title={file.getName()} />
-                    </object>
+                    <iframe src={dataUrl} height="100%" width="100%" title={file.getName()} />
                 {:else if blob.mimetype === 'text/plain' || extension === 'txt'}
                     <pre>
                         {ab2str(blob.data)}

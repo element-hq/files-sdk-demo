@@ -65,7 +65,7 @@
     "dayjs": "^1.10.7",
     "events": "^3.3.0",
     "github-markdown-css": "^5.1.0",
-    "matrix-files-sdk": "^1.0.3",
+    "matrix-files-sdk": "^1.1.2",
     "matrix-js-sdk": "^15.4.0-rc.1",
     "page": "^1.11.6",
     "svelte": "^3.46.2",

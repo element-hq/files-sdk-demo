@@ -38,6 +38,7 @@ limitations under the License.
     import EncryptionKeyRestoreDialog from "../EncryptionKeyRestoreDialog.svelte";
     import EncryptionKeyCreateDialog from '../EncryptionKeyCreateDialog.svelte';
     import ViewFileDialog from '../ViewFileDialog.svelte';
+    import { createObjectUrl } from "../../blob";
 
     export let clientManager: ClientManager;
     export let directory: IFolderEntry;
@@ -137,9 +138,9 @@ limitations under the License.
             let start: any | undefined;
             try {
                 start = toasts.info(`Downloading ${file.getName()}...`);
-                const { data, mimetype } = await file.getBlob();
+                const blob = await file.getBlob();
                 const anchor = document.createElement("a");
-                anchor.href = URL.createObjectURL(new Blob([data], { type: mimetype }));
+                anchor.href = createObjectUrl(blob)
                 anchor.download = file.getName();
                 anchor.click();
                 start.remove();
