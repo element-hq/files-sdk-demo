@@ -23,9 +23,8 @@ limitations under the License.
 
     import Dialog, { Title, Content, Actions } from '@smui/dialog';
     import Button, { Label } from '@smui/button';
-    import type { IFileEntry } from 'matrix-files-sdk';
+    import type { IFileEntry, ArrayBufferBlob } from 'matrix-files-sdk';
     import { errorWrapper } from '../utils';
-    import type { ArrayBufferBlob } from 'matrix-files-sdk/dist/utils';
     import { toasts } from 'svelte-toasts';
     import { Skeleton } from 'svelte-loading-skeleton';
     import { createObjectUrl } from '../blob';
@@ -175,7 +174,7 @@ limitations under the License.
                     </pre>
                 {:else if blob.mimetype === 'text/markdown' || extension === 'md'}
                     {#if editing}
-                        <Editor value={markdownValue} {plugins} sanitize={sanitizeMarkdown} on:change={markdownChanged} />
+                        <Editor value={markdownValue} {plugins} sanitize={sanitizeMarkdown} on:change={markdownChanged} placeholder="" editorConfig={{}} locale="en" overridePreview={undefined} uploadImages={undefined} />
                     {:else}
                         <Viewer value={markdownValue} {plugins} sanitize={sanitizeMarkdown} />
                     {/if}
