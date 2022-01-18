@@ -69,9 +69,9 @@ limitations under the License.
 
 <hr>
 <h3>Key backup</h3>
-<p>MatrixFiles.isKeyBackupAvailable: {isKeyBackupAvailable === undefined ? 'checking' : isKeyBackupAvailable}</p>
-<p>MatrixFiles.isConnectedToKeyBackup: {clientManager.crypto.isConnectedToKeyBackup()}</p>
-<p>MatrixFiles.getKeyBackupInfo():<br>
+<p>MatrixCrypto.isKeyBackupAvailable: {isKeyBackupAvailable === undefined ? 'checking' : isKeyBackupAvailable}</p>
+<p>MatrixCrypto.isConnectedToKeyBackup: {clientManager.crypto.isConnectedToKeyBackup()}</p>
+<p>MatrixCrypto.getKeyBackupInfo():<br>
     <JsonView json={keyBackupInfo} />
 </p>
 
