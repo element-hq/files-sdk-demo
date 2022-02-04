@@ -7,6 +7,7 @@ Features include:
 * Upload single and multiple files
 * Basic file operations: rename, delete, download
 * Preview some common file formats: images, text, markdown, PDF
+* Inline editing of markdown using [ByteMD](https://github.com/bytedance/bytemd)
 * Folder sharing and permission management
 * View version history for files
 * End-to-end encryption
