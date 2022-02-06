@@ -72,15 +72,19 @@ limitations under the License.
         }
     });
 
-    router('/', async () => {
+    async function handleAuth(otherwise: () => any) {
         if (isLoggedIn) {
             router.redirect('/home');
         } else if (clientManager.hasAuthData) {
             await clientManager.rehydrate();
             router.redirect('/home');
         } else {
-            router.redirect('/signin');
+            otherwise();
         }
+    }
+
+    router('/', async () => {
+        await handleAuth(() => router.redirect('/signin'));
     });
 
     type ThenRoute = (ctx: PageJS.Context) => string;
@@ -123,24 +127,10 @@ limitations under the License.
     }
 
     router('/signin', async (_ctx, next) => {
-        if (isLoggedIn) {
-            router.redirect('/home');
-        } else if (clientManager.hasAuthData) {
-            await clientManager.rehydrate();
-            router.redirect('/home');
-        } else {
-            next();
-        }
+        await handleAuth(() => next());
     }, () => page = Login);
     router('/register', async (_ctx, next) => {
-        if (isLoggedIn) {
-            router.redirect('/home');
-        } else if (clientManager.hasAuthData) {
-            await clientManager.rehydrate();
-            router.redirect('/home');
-        } else {
-            next();
-        }
+        await handleAuth(() => next());
     }, () => page = Register);
     router('/shared', requiresAuth('/shared'), () => page = SharedWithMe);
     router('/settings', requiresAuth('/settings'), () => page = Settings);
