@@ -28,9 +28,9 @@ limitations under the License.
     let inviteUserId: string;
     let inviteSent = false;
 
-    let members = folder.getMembers();
+    let members = folder.members;
 
-    const member = folder.getOwnMembership();
+    const member = folder.ownMembership;
 
     let memberBeingEdited: IFolderMembership | null = null;
     let editedMemberRole: FolderRole | null = null;
@@ -45,7 +45,7 @@ limitations under the License.
     async function kick(m: IFolderMembership) {
         await errorWrapper(async () => {
             await folder.removeMember(m.userId);
-            members = folder.getMembers();
+            members = folder.members;
         }, `Failed to remove ${m.userId}`);
     }
 
@@ -63,7 +63,7 @@ limitations under the License.
             await folder.setMemberRole(m.userId, editedMemberRole!);
             memberBeingEdited = null;
             editedMemberRole = null;
-            members = folder.getMembers();
+            members = folder.members;
         }, `Failed to set permissions for ${m.userId}`);
         members = members;
     }
@@ -77,7 +77,7 @@ limitations under the License.
         inviteSent = false;
         await errorWrapper(async () => {
             await folder.inviteMember(inviteUserId, FolderRole.Viewer);
-            members = folder.getMembers();
+            members = folder.members;
             inviteUserId = "";
             inviteSent = true;
         }, `Failed to invite ${inviteUserId}`);

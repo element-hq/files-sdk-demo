@@ -49,12 +49,12 @@ limitations under the License.
 
 {#if size}
     <span>{size}</span>
-{:else if entry.getEncryptionStatus() === 'decryptionFailed'}
+{:else if entry.encryptionStatus === 'decryptionFailed'}
     Unable to decrypt
-{:else if entry.getEncryptionStatus() === 'decryptionPending'}
+{:else if entry.encryptionStatus === 'decryptionPending'}
     <Skeleton />
 {:else}
-    {entry.getEncryptionStatus()}
+    {entry.encryptionStatus}
 {/if}
 
 <style>

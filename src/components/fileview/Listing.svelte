@@ -82,7 +82,7 @@ limitations under the License.
             }
 
             return d;
-        }).sort((a, b) => a.getName().localeCompare(b.getName()));
+        }).sort((a, b) => a.name.localeCompare(b.name));
         files = children.filter(c => !c.isFolder).map(c => c as IFileEntry).map(f => {
             let existing = currFiles.find(s => s.id === f.id);
 
@@ -91,24 +91,24 @@ limitations under the License.
             }
 
             return f;
-        }).sort((a, b) => a.getName().localeCompare(b.getName()));
+        }).sort((a, b) => a.name.localeCompare(b.name));
         childrenFetchedForDirectory = directory.id;
 
-        needsDecryption = files.some(x => ['encrypted', 'decryptionFailed'].includes(x.getEncryptionStatus()));
+        needsDecryption = files.some(x => ['encrypted', 'decryptionFailed'].includes(x.encryptionStatus));
     })();
 
     async function removeDir(dir: IFolderEntry) {
         folderMenu.setOpen(false);
         await errorWrapper(async () => {
             await dir.delete();
-        }, `Failed to delete folder ${dir.getName()}`);
+        }, `Failed to delete folder ${dir.name}`);
     }
 
     async function removeFile(file: IFileEntry) {
         fileMenu.setOpen(false);
         await errorWrapper(async () => {
             await file.delete();
-        }, `Failed to delete file ${file.getName()}`);
+        }, `Failed to delete file ${file.name}`);
     }
 
     let viewFileDialog: ViewFileDialog;
@@ -137,21 +137,21 @@ limitations under the License.
         if (await errorWrapper(async () => {
             let start: any | undefined;
             try {
-                start = toasts.info(`Downloading ${file.getName()}...`);
+                start = toasts.info(`Downloading ${file.name}...`);
                 const blob = await file.getBlob();
                 const anchor = document.createElement("a");
                 anchor.href = createObjectUrl(blob)
-                anchor.download = file.getName();
+                anchor.download = file.name;
                 anchor.click();
                 start.remove();
-                toasts.success(`Downloaded ${file.getName()}`, { duration: 4000, showProgress: true });
+                toasts.success(`Downloaded ${file.name}`, { duration: 4000, showProgress: true });
             } catch (err) {
                 if (start) {
                     start.remove();
                 }
                 throw err;
             }
-        }, `Failed to download ${file.getName()}`)) {
+        }, `Failed to download ${file.name}`)) {
             needsDecryptionDismissed = false;
         }
     }
@@ -160,7 +160,7 @@ limitations under the License.
         fileMenu.setOpen(false);
         await errorWrapper(async () => {
             await file.setLocked(state);
-        }, `Failed to ${state ? '' : 'un'}lock file ${file.getName()}`);
+        }, `Failed to ${state ? '' : 'un'}lock file ${file.name}`);
         files = files;
     }
 
@@ -169,7 +169,7 @@ limitations under the License.
         if (await errorWrapper(async () => {
             versionHistory = await file.getVersionHistory();
             historyDialog = true;
-        }, `Failed to get version history for ${file.getName()}`)) {
+        }, `Failed to get version history for ${file.name}`)) {
             needsDecryptionDismissed = false;
         };
     }
@@ -205,21 +205,21 @@ limitations under the License.
 
     async function renameFile(file: IFileEntry) {
         fileMenu.setOpen(false);
-        const name = await textfieldDialog.open('Rename file', file.getName(), 'File name', 'Rename', itemNameValidator(file.getName(), subdirectories, files));
+        const name = await textfieldDialog.open('Rename file', file.name, 'File name', 'Rename', itemNameValidator(file.name, subdirectories, files));
         if (name) {
             await errorWrapper(async () => {
                 await file.rename(name);
-            }, `Failed to rename file ${file.getName()}`);
+            }, `Failed to rename file ${file.name}`);
         }
     }
 
     async function copyFile(file: IFileEntry) {
         fileMenu.setOpen(false);
-        const name = await textfieldDialog.open('Copy file', `Copy of ${file.getName()}`, 'File name', 'Copy', itemNameValidator(file.getName(), subdirectories, files));
+        const name = await textfieldDialog.open('Copy file', `Copy of ${file.name}`, 'File name', 'Copy', itemNameValidator(file.name, subdirectories, files));
         if (name) {
             await errorWrapper(async () => {
-                await file.copyTo(file.getParent()!, name);
-            }, `Failed to copy file ${file.getName()}`);
+                await file.copyTo(file.parent!, name);
+            }, `Failed to copy file ${file.name}`);
         }
     }
 
@@ -235,21 +235,21 @@ limitations under the License.
 
     async function renameFolder(folder: IFolderEntry) {
         folderMenu.setOpen(false);
-        const name = await textfieldDialog.open('Rename folder', folder.getName(), 'Folder name', 'Rename', itemNameValidator(folder.getName(), subdirectories, files));
+        const name = await textfieldDialog.open('Rename folder', folder.name, 'Folder name', 'Rename', itemNameValidator(folder.name, subdirectories, files));
         if (name) {
             await errorWrapper(async () => {
                 await folder.rename(name);
-            }, `Failed to rename folder ${folder.getName()}`);
+            }, `Failed to rename folder ${folder.name}`);
         }
     }
 
     async function copyFolder(folder: IFolderEntry) {
         folderMenu.setOpen(false);
-        const name = await textfieldDialog.open('Copy folder', `Copy of ${folder.getName()}`, 'Folder name', 'Copy', itemNameValidator(folder.getName(), subdirectories, files));
+        const name = await textfieldDialog.open('Copy folder', `Copy of ${folder.name}`, 'Folder name', 'Copy', itemNameValidator(folder.name, subdirectories, files));
         if (name) {
             await errorWrapper(async () => {
-                await folder.copyTo(folder.getParent()!, name);
-            }, `Failed to copy folder ${folder.getName()}`);
+                await folder.copyTo(folder.parent!, name);
+            }, `Failed to copy folder ${folder.name}`);
         }
     }
 
@@ -280,7 +280,7 @@ limitations under the License.
             } catch (err) {
             }
             viewSourceDialog = true;
-        }, `Failed to get version history for ${file.getName()}`)) {
+        }, `Failed to get version history for ${file.name}`)) {
             needsDecryptionDismissed = false;
         }
     }
@@ -369,9 +369,9 @@ limitations under the License.
                 <Graphic class="material-icons-round">file_copy</Graphic>
                 <Text>Make a copy</Text>
             </Item>
-            <Item on:SMUI:action={() => setLocked(selectedFile, !selectedFile.isLocked())}>
-                <Graphic class="material-icons-round">{selectedFile.isLocked() ? 'lock_open' : 'lock'}</Graphic>
-                <Text>{selectedFile.isLocked() ? 'Unlock' : 'Lock'}</Text>
+            <Item on:SMUI:action={() => setLocked(selectedFile, !selectedFile.locked)}>
+                <Graphic class="material-icons-round">{selectedFile.locked ? 'lock_open' : 'lock'}</Graphic>
+                <Text>{selectedFile.locked ? 'Unlock' : 'Lock'}</Text>
             </Item>
             <Separator />
             <Item on:SMUI:action={() => removeFile(selectedFile)}>
@@ -438,7 +438,7 @@ limitations under the License.
                             <span class="material-icons-round">folder_outline</span>
                         </div>
                         <div>
-                            {dir.getName()}
+                            {dir.name}
                         </div>
                     </div>
                 </Cell>
@@ -458,12 +458,12 @@ limitations under the License.
                 <Cell on:click:preventDefault={(e) => viewFile(e, file)}>
                     <div class="name-col">
                         <div>
-                            <span class="material-icons-round">{fileIcon(file.getName())}</span>
+                            <span class="material-icons-round">{fileIcon(file.name)}</span>
                         </div>
                         <div>
-                            {file.getName()}
+                            {file.name}
                         </div>
-                        {#if file.isLocked()}
+                        {#if file.locked}
                             <div class="icon">
                                 <span class="material-icons-round">lock</span>
                             </div>
@@ -511,7 +511,7 @@ limitations under the License.
                             <Cell title={file.id}>
                                 {file.version}
                             </Cell>
-                            <Cell>{file.getName()}</Cell>
+                            <Cell>{file.name}</Cell>
                             <Cell>
                                 <EntrySize entry={file} />
                             </Cell>
@@ -546,9 +546,9 @@ limitations under the License.
     {#if viewSourceBranch}
         <Content>
             <p>
-                Room ID: {viewSourceBranch.getParent().id}<br>
+                Room ID: {viewSourceBranch.parent.id}<br>
                 Event ID: {viewSourceBranch.id}<br>
-                Encryption status: {viewSourceBranch.getEncryptionStatus()}
+                Encryption status: {viewSourceBranch.encryptionStatus}
             </p>
             <hr>
             <Accordion>

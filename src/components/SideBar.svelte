@@ -55,7 +55,7 @@ limitations under the License.
     {#each workspaces as workspace}
         <Item on:click:preventDefault={() => router.show(`/directory/${workspace.id}`)} href="#" selected={hash.startsWith(`#!/directory/${workspace.id}`)}>
             <Graphic class="material-icons-round">work</Graphic>
-            <Text>{workspace.getName()}</Text>
+            <Text>{workspace.name}</Text>
         </Item>
     {/each}
     <Separator />

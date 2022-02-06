@@ -57,7 +57,7 @@ limitations under the License.
             if (xUid && xUid !== ourUid) {
                 filtered.push({
                     accepted: true,
-                    name: x.getName(),
+                    name: x.name,
                     id: x.id,
                     sharedBy: xUid,
                 });

@@ -29,7 +29,7 @@ limitations under the License.
         let next: IEntry | undefined = directory;
         while (next) {
             linkTree.push(next as IFolderEntry);
-            next = next.getParent();
+            next = next.parent;
         }
         // take root off:
         linkTree.pop();
@@ -42,7 +42,7 @@ limitations under the License.
     <Button on:click:preventDefault={() => router.show('/home')} href="#" variant="text">Home</Button>
     {#each linkTree as item}
         <span class="material-icons-round">chevron_right</span>
-        <Button on:click:preventDefault={() => router.show(`/directory/${item.id}`)} href="#" variant="text">{item.getName()}</Button>
+        <Button on:click:preventDefault={() => router.show(`/directory/${item.id}`)} href="#" variant="text">{item.name}</Button>
     {/each}
 </div>
 

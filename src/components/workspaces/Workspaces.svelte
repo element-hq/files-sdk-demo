@@ -34,7 +34,7 @@ limitations under the License.
     async function remove(workspace: IFolderEntry) {
         await errorWrapper(async () => {
             await workspace.delete();
-        }, `Failed to delete workspace ${workspace.getName()}`);
+        }, `Failed to delete workspace ${workspace.name}`);
         workspaces = workspaces;
     }
 
@@ -55,11 +55,11 @@ limitations under the License.
 
     async function renameWorkspace(workspace: IFolderEntry) {
         workspaceMenu.setOpen(false);
-        const name = await textfieldDialog.open('Rename workspace', workspace.getName(), 'Workspace name', 'Rename', workspaceNameValidator(workspace.getName(), workspaces));
+        const name = await textfieldDialog.open('Rename workspace', workspace.name, 'Workspace name', 'Rename', workspaceNameValidator(workspace.name, workspaces));
         if (name) {
             await errorWrapper(async () => {
                 await workspace.rename(name);
-            }, `Failed to rename ${workspace.getName()}`);
+            }, `Failed to rename ${workspace.name}`);
             workspaces = workspaces;
         }
     }
@@ -107,7 +107,7 @@ limitations under the License.
         {#each workspaces as workspace}
             <Row class="cursor-pointer" on:dblclick:preventDefault={() => router.show(`/directory/${workspace.id}`)}  on:contextmenu:preventDefault={(e) => openWorkspaceMenu(workspace, e)} on:mousedown:preventDefault={() => {}}>
                 <Cell><span class="material-icons-round solo-icon">work</span></Cell>
-                <Cell>{workspace.getName()}</Cell>
+                <Cell>{workspace.name}</Cell>
                 <Cell><EntryDate entry={workspace} /></Cell>
             </Row>
         {/each}
@@ -120,7 +120,7 @@ limitations under the License.
     surface$style="width: fit-content; max-width: calc(100vw - 32px);"
 >
     {#if permissionsFor}
-        <Title style="font-size: 24px; font-weight: 600;">Permissions for {permissionsFor.getName()}</Title>
+        <Title style="font-size: 24px; font-weight: 600;">Permissions for {permissionsFor.name}</Title>
         <Content>
             <FolderPermissions folder={permissionsFor} />
         </Content>

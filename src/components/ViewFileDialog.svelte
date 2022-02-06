@@ -45,7 +45,7 @@ limitations under the License.
         if (e.detail.action === 'download') {
             const anchor = document.createElement("a");
             anchor.href = getObjectUrl() ?? '';
-            anchor.download = file.getName();
+            anchor.download = file.name;
             anchor.click();
         }
 
@@ -86,15 +86,15 @@ limitations under the License.
         editing = false;
         modified = false;
         markdownValue = '';
-        extension = file.getName().split('.').pop()!.toLowerCase();
+        extension = file.name.split('.').pop()!.toLowerCase();
 
         await errorWrapper(async () => {
             let start: any | undefined;
             try {
-                start = toasts.info(`Downloading ${file.getName()} for preview...`);
+                start = toasts.info(`Downloading ${file.name} for preview...`);
                 blob = await file.getBlob();
                 start.remove();
-                toasts.success(`Downloaded ${file.getName()} for preview`, { duration: 4000, showProgress: true });
+                toasts.success(`Downloaded ${file.name} for preview`, { duration: 4000, showProgress: true });
             } catch (err: any) {
                 errorMessage = `Failed to download file: ${err.message}`;
                 if (start) {
@@ -102,7 +102,7 @@ limitations under the License.
                 }
                 throw err;
             }
-        }, `Failed to download ${file.getName()} for preview`);
+        }, `Failed to download ${file.name} for preview`);
 
         if (blob) {
             dataUrl = await ab2base64(blob);
@@ -161,13 +161,13 @@ limitations under the License.
     surface$style="width: calc(100vw - 100px); max-width: calc(100vw - 32px); height: calc(100vh - 100px);"
 >
     {#if file}
-        <Title style="font-size: 24px; font-weight: 600;">{file.getName()}</Title>
+        <Title style="font-size: 24px; font-weight: 600;">{file.name}</Title>
         <Content>
             {#if blob}
                 {#if blob.mimetype.startsWith('image') || ['png', 'svg', 'jpg', 'jpeg', 'gif'].includes(extension)}
-                    <img src={dataUrl} alt={file.getName()} style="max-width: 100%; max-height: 100%;">
+                    <img src={dataUrl} alt={file.name} style="max-width: 100%; max-height: 100%;">
                 {:else if blob.mimetype === 'application/pdf' || extension === 'pdf'}
-                    <iframe src={dataUrl} height="100%" width="100%" title={file.getName()} />
+                    <iframe src={dataUrl} height="100%" width="100%" title={file.name} />
                 {:else if blob.mimetype === 'text/plain' || extension === 'txt'}
                     <pre>
                         {ab2str(blob.data)}

@@ -18,7 +18,7 @@ import { toasts } from 'svelte-toasts';
 import type { IEntry, IFileEntry, IFolderEntry } from "matrix-files-sdk";
 
 export function sortEntries(entries: IEntry[]): IEntry[] {
-    return entries.sort((a, b) => a.getName().localeCompare(b.getName()))
+    return entries.sort((a, b) => a.name.localeCompare(b.name))
 }
 
 export function fileIcon(filename: string): string {
@@ -55,17 +55,17 @@ export async function errorWrapper(block: () => Promise<any>, baseMessage: strin
 
 export function itemNameValidator(existingName: string | undefined, folders: IFolderEntry[], files: IFileEntry[]) {
     return (candidateName: string) => {
-        const folder = nameValidator(existingName, folders.map(x => x.getName()), 'folder')(candidateName);
+        const folder = nameValidator(existingName, folders.map(x => x.name), 'folder')(candidateName);
         if (folder !== true) {
             return folder;
         }
 
-        return nameValidator(existingName, files.map(x => x.getName()), 'file')(candidateName);
+        return nameValidator(existingName, files.map(x => x.name), 'file')(candidateName);
     }
 }
 
 export function workspaceNameValidator(existingName: string | undefined, workspaces: IFolderEntry[]) {
-    return nameValidator(existingName, workspaces.map(x => x.getName()), 'workspace');
+    return nameValidator(existingName, workspaces.map(x => x.name), 'workspace');
 }
 
 export function nameValidator(existingName: string | undefined, otherExistingItems: string[], descriptionName: string) {
