@@ -53,7 +53,10 @@ export async function createFromToken(
     userId: string,
     deviceId: string,
 ): Promise<MatrixFiles> {
-    return createClient(localStorage, { baseUrl: homeserver, accessToken, userId, deviceId });
+    const files = await createClient(localStorage, { baseUrl: homeserver, accessToken, userId, deviceId });
+    // used as a "ping" to spot connection errors
+    await files.client.waitForClientWellKnown();
+    return files;
 }
 
 export async function registerWithPassword(

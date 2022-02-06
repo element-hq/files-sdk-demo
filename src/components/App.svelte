@@ -21,6 +21,7 @@ limitations under the License.
     import Settings from "./Settings.svelte";
     import SharedWithMe from "./SharedWithMe.svelte";
     import Login from "./auth/Login.svelte";
+    import Reconnect from "./auth/Reconnect.svelte";
     import type { SvelteComponent } from "svelte";
     import Drawer, { AppContent, Content } from '@smui/drawer';
     import SideBar from "./SideBar.svelte";
@@ -72,19 +73,18 @@ limitations under the License.
         }
     });
 
-    async function handleAuth(otherwise: () => any) {
+    async function redirectIfAuthed(otherwise: () => any) {
         if (isLoggedIn) {
             router.redirect('/home');
-        } else if (clientManager.hasAuthData) {
-            await clientManager.rehydrate();
-            router.redirect('/home');
+        } else if (clientManager.hasAuthData && router.current !== '/reconnect') {
+            router.redirect('/reconnect');
         } else {
             otherwise();
         }
     }
 
     router('/', async () => {
-        await handleAuth(() => router.redirect('/signin'));
+        await redirectIfAuthed(() => router.redirect('/signin'));
     });
 
     type ThenRoute = (ctx: PageJS.Context) => string;
@@ -94,12 +94,12 @@ limitations under the License.
                 router.redirect('/'); // will route to login page if needed
                 nextRoute = typeof then === 'function' ? then(realCtx) : then;
                 realNext();
-            }
-
-            if (and) {
-                and(realCtx, realNext);
             } else {
-                realNext();
+                if (and) {
+                    and(realCtx, realNext);
+                } else {
+                    realNext();
+                }
             }
         };
     }
@@ -127,11 +127,14 @@ limitations under the License.
     }
 
     router('/signin', async (_ctx, next) => {
-        await handleAuth(() => next());
+        await redirectIfAuthed(() => next());
     }, () => page = Login);
     router('/register', async (_ctx, next) => {
-        await handleAuth(() => next());
+        await redirectIfAuthed(() => next());
     }, () => page = Register);
+    router('/reconnect', async (_ctx, next) => {
+        await redirectIfAuthed(() => next());
+    }, () => page = Reconnect);
     router('/shared', requiresAuth('/shared'), () => page = SharedWithMe);
     router('/settings', requiresAuth('/settings'), () => page = Settings);
     router('/home', requiresAuth('/home'), () => listing(undefined));
