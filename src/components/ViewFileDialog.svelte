@@ -38,7 +38,7 @@ limitations under the License.
         if (e.detail.action === 'save') {
             const data = new TextEncoder().encode(markdownValue);
             
-            await file.addVersion({data, size: data.length, mimetype: blob!.mimetype });
+            await file.addVersion({data, size: data.length, mimetype: 'text/markdown' });
             return _resolve(true);
         }
         
