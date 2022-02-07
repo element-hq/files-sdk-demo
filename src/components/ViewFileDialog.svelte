@@ -168,16 +168,16 @@ limitations under the License.
                     <img src={dataUrl} alt={file.name} style="max-width: 100%; max-height: 100%;">
                 {:else if blob.mimetype === 'application/pdf' || extension === 'pdf'}
                     <iframe src={dataUrl} height="100%" width="100%" title={file.name} />
-                {:else if blob.mimetype === 'text/plain' || extension === 'txt'}
-                    <pre>
-                        {ab2str(blob.data)}
-                    </pre>
                 {:else if blob.mimetype === 'text/markdown' || extension === 'md'}
                     {#if editing}
                         <Editor value={markdownValue} {plugins} sanitize={sanitizeMarkdown} on:change={markdownChanged} placeholder="" editorConfig={{}} locale="en" overridePreview={undefined} uploadImages={undefined} />
                     {:else}
                         <Viewer value={markdownValue} {plugins} sanitize={sanitizeMarkdown} />
                     {/if}
+                {:else if blob.mimetype === 'text/plain' || extension === 'txt'}
+                    <pre>
+                        {ab2str(blob.data)}
+                    </pre>
                 {:else}
                     Unable to preview/open files of this type: <pre>{blob.mimetype}</pre>.
                 {/if}
