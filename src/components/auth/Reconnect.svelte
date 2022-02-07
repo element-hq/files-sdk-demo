@@ -33,7 +33,8 @@ limitations under the License.
             errorMessage = '';
             loading = true;
             await clientManager.rehydrate();
-            router.redirect('/home');
+            router.redirect(clientManager.nextRoute ?? '/home');
+            clientManager.nextRoute = undefined;
         } catch (e: any) {
             console.error(e);
             errorMessage = [e.errcode, e.cause?.message ?? e.message].filter(x => !!x).join(': ');

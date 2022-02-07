@@ -35,6 +35,8 @@ export class ClientManager {
     public password: string = '';
     public keyBackupPassphrase: string = '';
 
+    public nextRoute: string | undefined;
+
     public get files(): MatrixFiles {
         if (!this._files) {
             throw new Error('No MatrixFiles connected');

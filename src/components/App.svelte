@@ -44,7 +44,6 @@ limitations under the License.
     dayjs.locale('en');
 
     let page: typeof SvelteComponent | undefined;
-    let nextRoute: string | undefined;
     let search = '';
     let isLoggedIn = false;
 
@@ -66,8 +65,6 @@ limitations under the License.
         if (authed) {
             loadWorkspaces();
             clientManager.on('modified', loadWorkspaces);
-            router.redirect(nextRoute || '/home');
-            nextRoute = undefined;
         } else {
             router.redirect('/');
         }
@@ -77,7 +74,10 @@ limitations under the License.
         if (isLoggedIn) {
             router.redirect('/home');
         } else if (clientManager.hasAuthData && router.current !== '/reconnect') {
-            router.redirect('/reconnect');
+            if (!clientManager.nextRoute) {
+                clientManager.nextRoute = router.current;
+            }
+            router.replace('/reconnect');
         } else {
             otherwise();
         }
@@ -92,7 +92,7 @@ limitations under the License.
         return (realCtx: PageJS.Context, realNext: () => void) => {
             if (!isLoggedIn) {
                 router.redirect('/'); // will route to login page if needed
-                nextRoute = typeof then === 'function' ? then(realCtx) : then;
+                clientManager.nextRoute = typeof then === 'function' ? then(realCtx) : then;
                 realNext();
             } else {
                 if (and) {
@@ -165,7 +165,7 @@ limitations under the License.
     }
 
     async function logout() {
-        nextRoute = undefined;
+        clientManager.nextRoute = undefined;
         search = '';
         await clientManager.logout()
         router.redirect('/signin');
