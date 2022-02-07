@@ -18,7 +18,7 @@ limitations under the License.
     import { JsonView } from '@zerodevx/svelte-json-view'
     import type { ClientManager } from "../ClientManager";
     import { onMount } from "svelte";
-    import type { IMyDevice } from "matrix-js-sdk/lib";
+    import type { IMyDevice } from "matrix-js-sdk";
     import dayjs from "dayjs";
     import type { DeviceTrustLevel } from "matrix-js-sdk/lib/crypto/CrossSigning";
     import { Icon } from "@smui/button";

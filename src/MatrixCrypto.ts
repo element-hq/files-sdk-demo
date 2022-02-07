@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { MatrixClient } from "matrix-js-sdk/lib";
+import type { MatrixClient } from "matrix-js-sdk";
 import type { ICurve25519AuthData, IKeyBackupInfo, IKeyBackupRestoreResult } from 'matrix-js-sdk/lib/crypto/keybackup';
 import { Curve25519, type TrustInfo } from 'matrix-js-sdk/lib/crypto/backup';
 import EventEmitter from "events";
