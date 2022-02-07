@@ -67,7 +67,8 @@ limitations under the License.
     }
 
     function onKeyUp(e: CustomEvent<KeyboardEvent>) {
-        if (!invalid && e.detail.key === 'Enter') enterPressed();
+        // TODO: figure out why the types are broken here
+        if (!invalid && (e as unknown as KeyboardEvent).key === 'Enter') enterPressed();
     }
 
     function closeHandler(e: CustomEvent<{ action: string }>) {
