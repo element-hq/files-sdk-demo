@@ -86,6 +86,7 @@ limitations under the License.
         editing = false;
         modified = false;
         markdownValue = '';
+        blob = undefined;
         extension = file.name.split('.').pop()!.toLowerCase();
 
         await errorWrapper(async () => {
@@ -95,6 +96,14 @@ limitations under the License.
                 blob = await file.getBlob();
                 start.remove();
                 toasts.success(`Downloaded ${file.name} for preview`, { duration: 4000, showProgress: true });
+                if (blob) {
+                    dataUrl = await ab2base64(blob);
+                    //`data:${blob.mimetype};base64,${btoa(blob.data)}`;
+                    if (blob.mimetype === 'text/markdown' || extension === 'md') {
+                        markdownValue = ab2str(blob.data);
+                        allowEditing = true;
+                    }
+                }
             } catch (err: any) {
                 errorMessage = `Failed to download file: ${err.message}`;
                 if (start) {
@@ -103,15 +112,6 @@ limitations under the License.
                 throw err;
             }
         }, `Failed to download ${file.name} for preview`);
-
-        if (blob) {
-            dataUrl = await ab2base64(blob);
-            //`data:${blob.mimetype};base64,${btoa(blob.data)}`;
-            if (blob.mimetype === 'text/markdown' || extension === 'md') {
-                markdownValue = ab2str(blob.data);
-                allowEditing = true;
-            }
-        }
 
         return new Promise<boolean>((resolve) => {
             _resolve = resolve;
