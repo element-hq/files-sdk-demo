@@ -43,7 +43,7 @@ export async function loginWithPassword(
     } = res;
     const baseUrl = wellKnown?.['m.homeserver']?.['base_url'] ?? homeserver;
 
-    return createFromToken(localStorage, baseUrl, accessToken, userId, deviceId);
+    return createClient(localStorage, { baseUrl, accessToken, userId, deviceId });
 }
 
 export async function createFromToken(
