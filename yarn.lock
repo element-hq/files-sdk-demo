@@ -23,6 +23,11 @@
   dependencies:
     remark-gfm "^1.0.0"
 
+"@log4js-node/log4js-api@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@log4js-node/log4js-api/-/log4js-api-1.0.2.tgz#7a8143fb33f077df3e579dca7f18fea74a02ec8b"
+  integrity sha512-6SJfx949YEWooh/CUPpJ+F491y4BYJmknz4hUN1+RHvKoUEynKbRmhnwbk/VLmh4OthLLDNCyWXfbh4DG1cTXA==
+
 "@material/animation@^11.0.0":
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/@material/animation/-/animation-11.0.0.tgz#d17935fc2d29f8d10f3f884783e35426de8a6adc"
@@ -3736,11 +3741,12 @@ matrix-encrypt-attachment@^1.0.1:
   resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.2.tgz#bc8c9f0672a0a1ef0b0d9b81a7a4e6f0b5f7f282"
   integrity sha512-OkmYC+VxQb0vxBAKMVE5ZFGOYRHMjtSmFgtW1jcJWtnhO1WwROuQm1i4LEh9JMnvpCZlkdDKE7htid2MyYMFeQ==
 
-matrix-files-sdk@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.0.0.tgz#e5fd600143dd1d3c017d6f734bdd7e1a151879ae"
-  integrity sha512-guTdRzYEZ+rKdD6RFKijgJe8pblM0zXtwSH/L06zGghed6pTlClvCC70ZTb10QwCD+4h6pj+mBNAebdVCtOzWw==
+matrix-files-sdk@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.2.0.tgz#aa12d5fe4dc80af3d5c070de126763c97f5ec29a"
+  integrity sha512-Onf3dtndUPqGQk2BWIrCQrz6gwshayoKxfRlryrF2PeOybMAJxQ5VWrnZwazLsMgQYTvc+LoCyXh5MY28RIyDQ==
   dependencies:
+    "@log4js-node/log4js-api" "^1.0.2"
     axios "^0.24.0"
     events "^3.3.0"
     matrix-encrypt-attachment "^1.0.1"

@@ -65,7 +65,7 @@
     "events": "^3.3.0",
     "github-markdown-css": "^5.1.0",
     "log4js": "^6.4.1",
-    "matrix-files-sdk": "^2.0.0",
+    "matrix-files-sdk": "^2.2.0",
     "matrix-js-sdk": "^15.4.0",
     "page": "^1.11.6",
     "svelte": "^3.46.2",
