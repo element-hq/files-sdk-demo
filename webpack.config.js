@@ -33,7 +33,12 @@ const common = merge([
 ]);
 
 const development = merge([
-  { entry: ['./src/main.ts', 'webpack-plugin-serve/client'] },
+  {
+    entry: {
+      logging: ['./src/logging.ts'],
+      main: { import: ['./src/main.ts', 'webpack-plugin-serve/client'], dependOn: 'logging' },
+    },
+  },
   { target: 'web' },
   parts.generateSourceMaps({ type: 'eval-source-map' }),
   parts.esbuild(),
@@ -42,7 +47,12 @@ const development = merge([
 
 const production = merge(
   [
-    { entry: ['./src/main.ts'] },
+    {
+      entry: {
+        logging: ['./src/logging.ts'],
+        main: { import: ['./src/main.ts'], dependOn: 'logging' },
+      },
+    },
     parts.typescript(),
     parts.optimize(),
     analyze && parts.analyze()

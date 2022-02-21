@@ -14,11 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// Required to make the site actually work.
-import App from './components/App.svelte';
+import { configure, getLogger } from 'log4js';
 
-const app = new App({
-	target: document.body,
+configure({
+    appenders: {
+        console: {
+            type: 'console',
+            layout: { type: 'coloured' },
+        },
+    },
+    categories: {
+        default: {
+            appenders: ['console'],
+            level: 'info',
+        },
+        MatrixFilesSDK: {
+            appenders: ['console'],
+            level: 'trace',
+        },
+    },
 });
 
-export default app;
+getLogger('logging').info('log4js configured');
