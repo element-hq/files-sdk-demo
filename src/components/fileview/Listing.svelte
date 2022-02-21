@@ -39,9 +39,12 @@ limitations under the License.
     import EncryptionKeyCreateDialog from '../EncryptionKeyCreateDialog.svelte';
     import ViewFileDialog from '../ViewFileDialog.svelte';
     import { createObjectUrl } from "../../blob";
+    import { getLogger } from "log4js";
 
     export let clientManager: ClientManager;
     export let directory: IFolderEntry;
+
+    const log = getLogger('Listing');
 
     const urlsToRevoke: string[] = [];
     let childrenFetchedForDirectory: string | null = null;
@@ -52,6 +55,7 @@ limitations under the License.
     let versionHistory: IFileEntry[];
 
     function onModified() {
+        log.debug('onModified');
         childrenFetchedForDirectory = null;
     }
 

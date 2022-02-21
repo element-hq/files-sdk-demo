@@ -216,3 +216,12 @@ exports.nodePolyfills = () => ({
     ],
   },
 });
+
+exports.log4js = () => ({
+  resolve: {
+    alias: {
+      // replace streamroller with empty module so that require('streamroller') doesn't fail in a browser:
+      streamroller: './webpack.empty.js',
+    }
+  }
+});

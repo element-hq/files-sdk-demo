@@ -16,6 +16,36 @@ limitations under the License.
 
 import App from './components/App.svelte';
 
+// const console = require('log4js/lib/appenders/console');
+// import * as Configuration from 'log4js/lib/configuration';
+
+// Configuration.prototype.loadAppenderModule = function() {
+// 	return console;
+// };
+
+import { configure, getLogger } from 'log4js';
+
+configure({
+    appenders: {
+        console: {
+            type: 'console',
+            layout: { type: 'coloured' },
+        },
+    },
+    categories: {
+        default: {
+            appenders: ['console'],
+            level: 'info',
+        },
+        MatrixFilesSDK: {
+            appenders: ['console'],
+            level: 'trace',
+        },
+    },
+});
+
+getLogger('main').info('log4js configured');
+
 // Required to make the site actually work.
 
 const app = new App({

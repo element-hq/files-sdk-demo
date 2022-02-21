@@ -29,6 +29,7 @@ const common = merge([
   parts.nodePolyfills(),
   parts.olm(),
   parts.public(),
+  parts.log4js(),
 ]);
 
 const development = merge([
