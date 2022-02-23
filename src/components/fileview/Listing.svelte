@@ -55,21 +55,36 @@ limitations under the License.
     let versionHistory: IFileEntry[];
 
     function onModified() {
-        log.debug('onModified');
+        log.info('onModified');
         childrenFetchedForDirectory = null;
     }
 
-    directory.on('modified', onModified);
+    log.info('loaded');
 
+    let shadowDirectory = directory;
+
+    onMount(() => {
+        keyBackupStatus();
+        shadowDirectory.on('modified', onModified);
+        clientManager.on('keyBackupStatus', keyBackupStatus);
+    });
     onDestroy(() => {
         urlsToRevoke.forEach(u => URL.revokeObjectURL(u));
-        directory.off('modified', onModified);
+        shadowDirectory.off('modified', onModified);
+        clientManager.off('keyBackupStatus', keyBackupStatus);
     });
 
     let needsDecryption = false;
     let needsDecryptionDismissed = false;
 
     $: (async () => {
+        if (!shadowDirectory || shadowDirectory?.id !== directory.id) {
+            if (shadowDirectory) {
+                shadowDirectory.off('modified', onModified);
+            }
+            shadowDirectory = directory;
+            shadowDirectory.on('modified', onModified);
+        }
         if (childrenFetchedForDirectory === directory.id) {
             return;
         }
@@ -305,14 +320,6 @@ limitations under the License.
         keyBackupExists = await clientManager.crypto.isKeyBackupAvailable();
         deviceCount = (await clientManager.client.getDevices()).devices.length;
     }
-
-    onMount(() => {
-        keyBackupStatus();
-        clientManager.on('keyBackupStatus', keyBackupStatus);
-    });
-    onDestroy(() => {
-        clientManager.off('keyBackupStatus', keyBackupStatus);
-    });
 </script>
 
 {#if needsDecryption && !needsDecryptionDismissed}

@@ -3741,10 +3741,10 @@ matrix-encrypt-attachment@^1.0.1:
   resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.2.tgz#bc8c9f0672a0a1ef0b0d9b81a7a4e6f0b5f7f282"
   integrity sha512-OkmYC+VxQb0vxBAKMVE5ZFGOYRHMjtSmFgtW1jcJWtnhO1WwROuQm1i4LEh9JMnvpCZlkdDKE7htid2MyYMFeQ==
 
-matrix-files-sdk@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.2.0.tgz#aa12d5fe4dc80af3d5c070de126763c97f5ec29a"
-  integrity sha512-Onf3dtndUPqGQk2BWIrCQrz6gwshayoKxfRlryrF2PeOybMAJxQ5VWrnZwazLsMgQYTvc+LoCyXh5MY28RIyDQ==
+matrix-files-sdk@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.3.2.tgz#277f74c88fa92405c6ff9942328f691b1ccc27ff"
+  integrity sha512-qpiZD8pl28BsxGD4QbNyiR087/emjYAVNsuCaKRdH8UTm3Jl46rGD/DtyTxP0LWvh34eFPXtAMhtZ1ywQEJm8w==
   dependencies:
     "@log4js-node/log4js-api" "^1.0.2"
     axios "^0.24.0"
