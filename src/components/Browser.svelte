@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<svelte:head>
+    <title>{title}</title>
+</svelte:head>
+
 <script lang="ts">
     import type { ClientManager } from "../ClientManager";
     import Listing from "./fileview/Listing.svelte";
@@ -27,6 +31,10 @@ limitations under the License.
     export let clientManager!: ClientManager;
     export let directoryId!: string | undefined;
     export let workspaces!: IFolderEntry[];
+
+    let title = '';
+
+    $: title = !directoryId ? 'Home' : `${directory?.parent?.parent ? `... > ${directory?.parent?.name}` : 'Home'} > ${directory?.name ?? ''}`;
 
     let directory: IFolderEntry | undefined = undefined;
 

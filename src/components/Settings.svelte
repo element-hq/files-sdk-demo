@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<svelte:head>
+    <title>Settings</title>
+</svelte:head>
+
 <script lang="ts">
     import { JsonView } from '@zerodevx/svelte-json-view'
     import type { ClientManager } from "../ClientManager";

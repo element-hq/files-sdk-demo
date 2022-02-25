@@ -14,6 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
+<svelte:head>
+    <title>Login</title>
+</svelte:head>
+
 <script lang="ts">
     import router from 'page';
     import type { ClientManager } from "../../ClientManager";
