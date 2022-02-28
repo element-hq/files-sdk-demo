@@ -3746,10 +3746,10 @@ matrix-events-sdk@^0.0.1-beta.7:
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1-beta.7.tgz#5ffe45eba1f67cc8d7c2377736c728b322524934"
   integrity sha512-9jl4wtWanUFSy2sr2lCjErN/oC8KTAtaeaozJtrgot1JiQcEI4Rda9OLgQ7nLKaqb4Z/QUx/fR3XpDzm5Jy1JA==
 
-matrix-files-sdk@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.4.0.tgz#35966aeee411eeccd7bf40d07b05d72bdb7bbadf"
-  integrity sha512-nXxuPqb4jr2qUCI9OIcxQPnKfmtZj2Njrek+n4ZnSQQP+LevRKu7lLz/jjDF9MYiHqQ95NNHHLSiJmHitdbLDQ==
+matrix-files-sdk@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-2.4.1.tgz#0e4eb5eecc27f3322ffef93ea81ee2df6a78d37f"
+  integrity sha512-kkb2QK+vj6+yapi0DR1164w89kaG5xWTZRbIS6Ahpu/4WPIXft6C5pZcZazQzdZ2DxPSxwVAj+tIAWc5q/L8oA==
   dependencies:
     "@log4js-node/log4js-api" "^1.0.2"
     axios "^0.24.0"
