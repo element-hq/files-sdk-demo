@@ -130,6 +130,7 @@ export class ClientManager {
             await this._files.logout();
             this._files = undefined;
             this._crypto = undefined;
+            localStorage.clear();
         }
         this._logout();
     }
