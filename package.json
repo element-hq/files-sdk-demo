@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",
+    "@types/mime-types": "^2.1.1",
     "@types/page": "^1.11.5",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^9.0.1",
@@ -67,6 +68,7 @@
     "log4js": "^6.4.1",
     "matrix-files-sdk": "^2.4.1",
     "matrix-js-sdk": "^15.6.0-rc.1",
+    "mime-types": "^2.1.34",
     "page": "^1.11.6",
     "svelte": "^3.46.2",
     "svelte-accordion": "^0.0.0-development",

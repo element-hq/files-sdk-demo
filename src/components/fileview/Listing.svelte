@@ -40,6 +40,7 @@ limitations under the License.
     import ViewFileDialog from '../ViewFileDialog.svelte';
     import { createObjectUrl } from "../../blob";
     import { getLogger } from "log4js";
+    import { getMimeFromFilename } from "../../mime";
 
     export let clientManager: ClientManager;
     export let directory: IFolderEntry;
@@ -277,7 +278,7 @@ limitations under the License.
             await errorWrapper(async () => {
                 // if existing file then upload as new version
                 const start = toasts.info(`Uploading ${file.name}...`);
-                await directory.addFile(file.name, { data: await file.arrayBuffer(), mimetype: file.type, size: file.size });
+                await directory.addFile(file.name, { data: await file.arrayBuffer(), mimetype: file.type || getMimeFromFilename(file.name), size: file.size });
                 if (start.remove) {
                     start.remove();
                 }
