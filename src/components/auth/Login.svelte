@@ -37,6 +37,7 @@ limitations under the License.
             errorMessage = '';
             loading = true;
             await clientManager.login();
+            router.replace('/');
         } catch (e: any) {
             console.error(e);
             errorMessage = [e.errcode, e.cause?.message ?? e.message].filter(x => !!x).join(': ');
