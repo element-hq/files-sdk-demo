@@ -26,14 +26,17 @@ limitations under the License.
     import type { IFolderEntry } from "matrix-files-sdk";
     import EntryDate from "../EntryDate.svelte";
     import FolderPermissions from './FolderPermissions.svelte';
+    import { toasts } from 'svelte-toasts';
     
     export let workspaces: IFolderEntry[];
 
     let permissionsFor: IFolderEntry;
 
     async function remove(workspace: IFolderEntry) {
+        workspaceMenu.setOpen(false);
         await errorWrapper(async () => {
             await workspace.delete();
+            toasts.success(`Deleted ${workspace.name}`, { duration: 4000, showProgress: true });
         }, `Failed to delete workspace ${workspace.name}`);
         workspaces = workspaces;
     }
