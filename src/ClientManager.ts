@@ -129,6 +129,7 @@ export class ClientManager {
         if (this._files) {
             await this._files.logout();
             this._files = undefined;
+            this._crypto = undefined;
         }
         this._logout();
     }
