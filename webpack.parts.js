@@ -10,6 +10,7 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const { MiniHtmlWebpackPlugin } = require('mini-html-webpack-plugin');
+const { EnvironmentPlugin } = require('webpack');
 
 exports.devServer = () => ({
   watch: true,
@@ -21,6 +22,12 @@ exports.devServer = () => ({
     })
   ]
 })
+
+exports.env = () => ({
+  plugins: [
+    new EnvironmentPlugin(['DEFAULT_HOMESERVER']),
+  ]
+});
 
 exports.page = ({ title }) => ({
   plugins: [new MiniHtmlWebpackPlugin({

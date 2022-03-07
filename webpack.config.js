@@ -21,6 +21,7 @@ const { mode, analyze } = require('webpack-nano/argv');
 
 const common = merge([
   { output: { path: path.resolve(process.cwd(), 'dist') } },
+  parts.env(),
   parts.page({ title: 'Files SDK Demo' }),
   parts.svelte(mode),
   parts.extractCSS(),

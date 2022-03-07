@@ -39,10 +39,10 @@ If you are using other editors you may need to install a plugin in order to get 
 
 ## Building and running in production mode
 
-To create an optimised version of the app:
+To create an optimised version of the app which defaults to matrix.org homeserver:
 
 ```bash
-yarn build
+DEFAULT_HOMESERVER=https://matrix.org yarn build
 ```
 
 This will output a set of files into the `dist` folder which can then be deployed to a CDN or web server (example [here](.github/workflows/ci.yml)).
