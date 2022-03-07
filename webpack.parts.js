@@ -25,7 +25,9 @@ exports.devServer = () => ({
 
 exports.env = () => ({
   plugins: [
-    new EnvironmentPlugin(['DEFAULT_HOMESERVER']),
+    new EnvironmentPlugin({
+      DEFAULT_HOMESERVER: 'http://localhost:8080',
+    }),
   ]
 });
 

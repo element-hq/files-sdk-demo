@@ -20,7 +20,7 @@ import { readValue, storeValue } from "./storage";
 import { MatrixCrypto } from "./MatrixCrypto";
 import { SimpleObservable } from "./external/SimpleObservable";
 
-const defaultHomeserver = process.env.DEFAULT_HOMESERVER ?? 'http://localhost:8080';
+const defaultHomeserver = process.env.DEFAULT_HOMESERVER;
 
 export class ClientManager {
     private _files: MatrixFiles | undefined;
