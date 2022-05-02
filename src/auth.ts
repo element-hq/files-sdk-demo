@@ -18,7 +18,7 @@ import { createClient as createClientImpl, type ICreateClientOpts } from 'matrix
 import { LocalStorageCryptoStore } from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
 import { MatrixFiles } from 'matrix-files-sdk';
 
-export async function getWellKnown(baseUrl: string): Promise<{ 'm.authentication'? :{ issuer?: string }, 'm.homeserver'?: { base_url?: string } }> {
+export async function getWellKnown(baseUrl: string): Promise<{ 'm.authentication'? :{ issuer: string, account?: string }, 'm.homeserver'?: { base_url?: string } }> {
     const url = new URL(baseUrl);
     url.search = '';
     url.pathname = '/.well-known/matrix/client';
