@@ -19,6 +19,7 @@ import { loginWithPassword, createFromToken, registerWithPassword } from "./auth
 import { readValue, storeValue } from "./storage";
 import { MatrixCrypto } from "./MatrixCrypto";
 import { SimpleObservable } from "./external/SimpleObservable";
+import { HttpApiEvent } from "matrix-js-sdk";
 
 const defaultHomeserver = process.env.DEFAULT_HOMESERVER!;
 
@@ -78,9 +79,9 @@ export class ClientManager {
         this._files = await loginWithPassword(localStorage, this.homeserverUrl, this.userId, this.password);
 
         this.homeserverUrl = this.client.getHomeserverUrl();
-        this.accessToken = this.client.getAccessToken();
+        this.accessToken = this.client.getAccessToken() ?? '';
         this.deviceId = this.client.deviceId ?? '';
-        this.userId = this.client.getUserId();
+        this.userId = this.client.getUserId() ?? '';
 
         this.storeValues();
 
@@ -91,9 +92,9 @@ export class ClientManager {
         this._files = await registerWithPassword(localStorage, this.homeserverUrl, this.userId, this.password);
 
         this.homeserverUrl = this.client.getHomeserverUrl();
-        this.accessToken = this.client.getAccessToken();
+        this.accessToken = this.client.getAccessToken() ?? '';
         this.deviceId = this.client.deviceId ?? '';
-        this.userId = this.client.getUserId();
+        this.userId = this.client.getUserId() ?? '';
 
         this.storeValues();
 
@@ -104,7 +105,7 @@ export class ClientManager {
         if (!this._files) {
             throw new Error('Not logged in');
         }
-        this.client.on("Session.logged_out", () => {
+        this.client.on(HttpApiEvent.SessionLoggedOut, () => {
             console.log("Session.logged_out");
             this._logout();
         });

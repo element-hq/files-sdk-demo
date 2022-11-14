@@ -21,7 +21,6 @@ const lib: typeof mxjssdk = require('matrix-js-sdk/lib/browser-index');
 const createClientImpl: typeof mxjssdk.createClient = lib.createClient;
 
 import { LocalStorageCryptoStore } from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
-import { WebStorageSessionStore } from 'matrix-js-sdk/lib/store/session/webstorage';
 import { MatrixFiles } from 'matrix-files-sdk';
 
 export async function loginWithPassword(
@@ -50,8 +49,8 @@ export async function createFromToken(
     localStorage: Storage,
     homeserver: string,
     accessToken: string,
-    userId: string,
-    deviceId: string,
+    userId?: string,
+    deviceId?: string,
 ): Promise<MatrixFiles> {
     const files = await createClient(localStorage, { baseUrl: homeserver, accessToken, userId, deviceId });
     // used as a "ping" to spot connection errors
@@ -73,10 +72,14 @@ export async function registerWithPassword(
     const {
         access_token: accessToken,
         user_id: userId,
-        well_known: wellKnown,
         device_id: deviceId,
     } = res;
+    const wellKnown = await tempClient.waitForClientWellKnown();
     const baseUrl = wellKnown?.['m.homeserver']?.['base_url'] ?? homeserver;
+
+    if (!accessToken) {
+        throw new Error('No access token returned from registration');
+    }
 
     return createFromToken(localStorage, baseUrl, accessToken, userId, deviceId);
 }
@@ -85,19 +88,16 @@ export async function createClient(
     localStorage: Storage,
     options: mxjssdk.ICreateClientOpts,
 ): Promise<MatrixFiles> {
-    const sessionStore = new WebStorageSessionStore(localStorage);
     const cryptoStore = new LocalStorageCryptoStore(localStorage);
 
     await cryptoStore.startup();
     const client = createClientImpl({
         ...options,
-        sessionStore,
         cryptoStore,
         useAuthorizationHeader: true, // presumably this is good practice
         // these are copied from files-sdk:
         cryptoCallbacks: {},
         timelineSupport: true, // for file management
-        unstableClientRelationAggregation: true, // for edits
     });
 
     return new MatrixFiles(client);

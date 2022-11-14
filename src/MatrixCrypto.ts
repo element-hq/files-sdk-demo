@@ -15,16 +15,17 @@ limitations under the License.
 */
 
 import type { MatrixClient } from "matrix-js-sdk";
-import type { ICurve25519AuthData, IKeyBackupInfo, IKeyBackupRestoreResult } from 'matrix-js-sdk/lib/crypto/keybackup';
-import { Curve25519, type TrustInfo } from 'matrix-js-sdk/lib/crypto/backup';
+import type { IKeyBackupInfo, IKeyBackupRestoreResult } from 'matrix-js-sdk/lib/crypto/keybackup';
+import type { TrustInfo } from 'matrix-js-sdk/lib/crypto/backup';
 import EventEmitter from "events";
+import { CryptoEvent } from "matrix-js-sdk/lib/crypto";
 
 export type { IKeyBackupInfo } from 'matrix-js-sdk/lib/crypto/keybackup';
 
 export class MatrixCrypto extends EventEmitter {
     constructor(private client: MatrixClient) {
         super();
-        client.on('crypto.keyBackupStatus', this.onKeyBackupStatus);
+        client.on(CryptoEvent.KeyBackupStatus, this.onKeyBackupStatus);
     }
 
     async init(): Promise<void> {
@@ -32,7 +33,10 @@ export class MatrixCrypto extends EventEmitter {
 
         this.client.setCryptoTrustCrossSignedDevices(true);
 
-        await this.client.downloadKeys([this.client.getUserId()]);
+        const userId = this.client.getUserId();
+        if (userId) {
+            await this.client.downloadKeys([userId]);
+        }
 
         // We don't support verifications at the moment.
         this.client.setGlobalErrorOnUnknownDevices(false);
@@ -54,27 +58,14 @@ export class MatrixCrypto extends EventEmitter {
             throw new Error('No key backup available');
         }
 
-        if (!this.client.crypto.sessionStore.getLocalTrustedBackupPubKey()
-            && keyBackup.algorithm === Curve25519.algorithmName) {
-            // derive public key from private and store as trusted
-            const privateKey = await this.client.keyBackupKeyFromPassword(passphrase, keyBackup);
-            const [, authData] = await Curve25519.prepare(privateKey);
-            await this.client.crypto.setTrustedBackupPubKey((authData as ICurve25519AuthData).public_key);
-            const trustInfo = await this.client.isKeyBackupTrusted(keyBackup);
-            // if it turns out that it doesn't match then clear it out:
-            if (!trustInfo.usable) {
-                await this.client.crypto.setTrustedBackupPubKey('');
-            }
-        }
-
         // The semantics here look odd:
         // First we try and restore with the password which will throw an error if the password is wrong
         // Then we actually test to see if the backup was usable and throw an error if not
 
         const restoreResult = await this.client.restoreKeyBackupWithPassword(
             passphrase,
-            undefined as unknown as string, // TODO: fix once matrix-js-sdk has corrected types
-            undefined as unknown as string, // TODO: fix once matrix-js-sdk has corrected types
+            undefined,
+            undefined,
             keyBackup,
             {},
         );

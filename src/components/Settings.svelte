@@ -47,11 +47,13 @@ limitations under the License.
         isKeyBackupAvailable = await clientManager.crypto.isKeyBackupAvailable();
         keyBackupInfo = await clientManager.crypto.getKeyBackupInfo() ?? undefined;
         devices = (await client().getDevices()).devices;
-        deviceTrust = devices.reduce((map, d) => {
-            map[d.device_id] = clientManager.client.checkDeviceTrust(clientManager.client.getUserId(), d.device_id);
-            return map;
-        }, {} as Record<string, DeviceTrustLevel>);
-        
+        const userId = clientManager.client.getUserId();
+        if (userId) {
+            deviceTrust = devices.reduce((map, d) => {
+                map[d.device_id] = clientManager.client.checkDeviceTrust(userId, d.device_id);
+                return map;
+            }, {} as Record<string, DeviceTrustLevel>);
+        }
     }
     onMount(update);
 </script>
