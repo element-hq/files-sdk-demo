@@ -14,12 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type mxjssdk from 'matrix-js-sdk/lib';
-
-const lib: typeof mxjssdk = require('matrix-js-sdk/lib/browser-index');
-
-const createClientImpl: typeof mxjssdk.createClient = lib.createClient;
-
+import { createClient as createClientImpl, type ICreateClientOpts } from 'matrix-js-sdk/lib';
 import { LocalStorageCryptoStore } from 'matrix-js-sdk/lib/crypto/store/localStorage-crypto-store';
 import { MatrixFiles } from 'matrix-files-sdk';
 
@@ -86,7 +81,7 @@ export async function registerWithPassword(
 
 export async function createClient(
     localStorage: Storage,
-    options: mxjssdk.ICreateClientOpts,
+    options: ICreateClientOpts,
 ): Promise<MatrixFiles> {
     const cryptoStore = new LocalStorageCryptoStore(localStorage);
 

@@ -21,7 +21,7 @@ limitations under the License.
     import Button, { Label } from "@smui/button";
     import { Title } from "@smui/paper";
     import CircularProgress from '@smui/circular-progress';
-    import { ConnectionError } from 'matrix-js-sdk';
+    import { ConnectionError } from 'matrix-js-sdk/lib';
 
     export let clientManager: ClientManager;
 

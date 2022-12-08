@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import type { MatrixClient } from "matrix-js-sdk";
+import type { MatrixClient } from "matrix-js-sdk/lib";
 import type { IKeyBackupInfo, IKeyBackupRestoreResult } from 'matrix-js-sdk/lib/crypto/keybackup';
 import type { TrustInfo } from 'matrix-js-sdk/lib/crypto/backup';
 import EventEmitter from "events";
@@ -76,7 +76,7 @@ export class MatrixCrypto extends EventEmitter {
     }
 
     isConnectedToKeyBackup(): boolean {
-        return this.client.getKeyBackupEnabled();
+        return !!this.client.getKeyBackupEnabled();
     }
 
     async createNewKeyBackup(passphrase: string): Promise<string> {

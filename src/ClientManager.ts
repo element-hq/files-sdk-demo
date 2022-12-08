@@ -19,7 +19,7 @@ import { loginWithPassword, createFromToken, registerWithPassword } from "./auth
 import { readValue, storeValue } from "./storage";
 import { MatrixCrypto } from "./MatrixCrypto";
 import { SimpleObservable } from "./external/SimpleObservable";
-import { HttpApiEvent } from "matrix-js-sdk";
+import { HttpApiEvent } from "matrix-js-sdk/lib";
 
 const defaultHomeserver = process.env.DEFAULT_HOMESERVER!;
 

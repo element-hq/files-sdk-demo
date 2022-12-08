@@ -23,7 +23,7 @@ limitations under the License.
     import type { ClientManager } from "../ClientManager";
     import { onDestroy, onMount } from "svelte";
     import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
-    import type { Room } from "matrix-js-sdk";
+    import type { Room } from "matrix-js-sdk/lib";
     import { errorWrapper } from "../utils";
     import Button, { Label } from '@smui/button';
 

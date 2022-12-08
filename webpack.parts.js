@@ -180,7 +180,7 @@ exports.esbuild = () => {
           test: /\.js$/,
           loader: 'esbuild-loader',
           options: {
-            target: 'es2015'
+            target: 'es2018'
           }
         },
         {
@@ -188,7 +188,7 @@ exports.esbuild = () => {
           loader: 'esbuild-loader',
           options: {
             loader: 'ts',
-            target: 'es2015'
+            target: 'es2018'
           }
         }
       ]
