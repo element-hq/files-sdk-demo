@@ -230,6 +230,10 @@ export class ClientManager {
 
                 const json = await res.json();
 
+                if (json.error) {
+                    throw new Error(`${json.error}: ${json.error_description}`);
+                }
+
                 // Cache the client details for subsequent use
                 clientIds[authority] = {
                     client_id: json.client_id,
