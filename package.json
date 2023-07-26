@@ -35,7 +35,7 @@
     "svelte-loader": "^3.1.2",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.0",
-    "webpack": "^5.61.0",
+    "webpack": "^5.76.0",
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-merge": "^5.8.0",
     "webpack-nano": "^1.1.1",
