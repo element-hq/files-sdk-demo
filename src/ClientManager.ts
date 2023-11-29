@@ -19,7 +19,7 @@ import { loginWithPassword, createFromToken, registerWithPassword } from "./auth
 import { readValue, storeValue } from "./storage";
 import { MatrixCrypto } from "./MatrixCrypto";
 import { SimpleObservable } from "./external/SimpleObservable";
-import { HttpApiError, MatrixError } from "matrix-js-sdk/lib";
+import { HttpApiEvent, MatrixError } from "matrix-js-sdk/lib";
 import { toasts } from "svelte-toasts";
 import router from 'page';
 import { getLogger } from "log4js";
@@ -468,7 +468,7 @@ export class ClientManager {
         // try {
         //     await logoutOidc();
         // } catch (e) {
-        //     // it might be that it isn't intialised
+        //     // it might be that it isn't initialised
         // }
         this.userId = '';
         this.keyBackupPassphrase = '';
