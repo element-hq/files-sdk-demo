@@ -720,10 +720,10 @@
     "@material/theme" "^13.0.0"
     tslib "^2.1.0"
 
-"@matrix-org/matrix-sdk-crypto-js@^0.1.0-alpha.5":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-js/-/matrix-sdk-crypto-js-0.1.4.tgz#c13c7c8c3a1d8da08e6ad195d25e5e61cc402df7"
-  integrity sha512-OxG84iSeR89zYLFeb+DCaFtZT+DDiIu+kTkqY8OYfhE5vpGLFX2sDVBRrAdos1IUqEoboDloDBR9+yU7hNRyog==
+"@matrix-org/matrix-sdk-crypto-wasm@^3.0.1":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.1.0.tgz#38d8707dd5bdad4e98a0a66bf266accfc401b3cd"
+  integrity sha512-jFl8jeL16u9pyo1NIdg6US4r+Srm7KixL+cMYVbRG8EwB4UpF4Bt+3TdBUhWGbVc1Qte1htdBjPs8ZB+gZWkYw==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.13.tgz":
   version "3.2.13"
@@ -2084,6 +2084,11 @@ crypto-js@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
   integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
 css-color-names@^1.0.1:
   version "1.0.1"
@@ -3657,49 +3662,51 @@ markdown-table@^2.0.0:
   dependencies:
     repeat-string "^1.0.0"
 
-matrix-encrypt-attachment@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.2.tgz#bc8c9f0672a0a1ef0b0d9b81a7a4e6f0b5f7f282"
-  integrity sha512-OkmYC+VxQb0vxBAKMVE5ZFGOYRHMjtSmFgtW1jcJWtnhO1WwROuQm1i4LEh9JMnvpCZlkdDKE7htid2MyYMFeQ==
+matrix-encrypt-attachment@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/matrix-encrypt-attachment/-/matrix-encrypt-attachment-1.0.3.tgz#6e016587728c396549c833985f39cbf6c07ee97b"
+  integrity sha512-NwfoDY/yHL9Zo8KrY5GP8ymAoZJpEFKEK+IgJKdWf5xtsIFf7KIU2pbw8+Eq592j//nSDOC+/Ff4Fk8gVvDZpw==
 
 matrix-events-sdk@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/matrix-events-sdk/-/matrix-events-sdk-0.0.1.tgz#c8c38911e2cb29023b0bbac8d6f32e0de2c957dd"
   integrity sha512-1QEOsXO+bhyCroIe2/A5OwaxHvBm7EsSQ46DEDn8RBIfQwN5HWBpFvyWWR4QY0KHPPnnJdI99wgRiAl7Ad5qaA==
 
-matrix-files-sdk@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-3.0.2.tgz#7037fc4b0c4dd0cadd5612605eda498596fdcd37"
-  integrity sha512-XbO+IV/LKY2fxrNTOBZzBQ9zjfuVd7xfLepKqF8f9Mvo7s4b+N4PT/Kdr6ovpQahRQI3N4vfIYSVq9/c2RZFEg==
+matrix-files-sdk@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-files-sdk/-/matrix-files-sdk-3.1.0.tgz#95846361fd087f7b92edee5f4dffe2c77a4e1801"
+  integrity sha512-EMEHz2mPtSxzD8ErnReiSD5cibWIL+6TEZm7tnfusj6jX32BDMFq/vLDtXEpWVR/Z06Nr7vIcUWPEG4ddVUzZA==
   dependencies:
     "@log4js-node/log4js-api" "^1.0.2"
     axios "^0.24.0"
     events "^3.3.0"
-    matrix-encrypt-attachment "^1.0.1"
+    matrix-encrypt-attachment "^1.0.3"
     p-retry "^4.5.0"
 
-matrix-js-sdk@^24.1.0:
-  version "24.1.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-24.1.0.tgz#6e5ecbadc44cf725c02d32db07f74dcb67b88d11"
-  integrity sha512-xEx2ZoNsS56dwgqLJ3rIv2SUpFxdQLrLKmJCpMatMUKCAg+NGuZfpQ3QXblIbGaqFNQZCH7fC7S48AeTMZp1Jw==
+matrix-js-sdk@^30.1.0:
+  version "30.1.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.1.0.tgz#5ab8caf933ddc646ffd1076c5ce6b5d48376d392"
+  integrity sha512-QhYAMD6kD6vE3DLsbEnPVLmvk8LQrGIMvVEnQGOkBq3eUjg0r49gZEtDeRbCfOVwFO1hoTfxIgm6CfqG0l5AAg==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-js" "^0.1.0-alpha.5"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^3.0.1"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
+    jwt-decode "^3.1.2"
     loglevel "^1.7.1"
     matrix-events-sdk "0.0.1"
-    matrix-widget-api "^1.3.1"
+    matrix-widget-api "^1.6.0"
+    oidc-client-ts "^2.2.4"
     p-retry "4"
     sdp-transform "^2.14.1"
     unhomoglyph "^1.0.6"
     uuid "9"
 
-matrix-widget-api@^1.3.1:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.5.0.tgz#4ae3e46a7f2854f944ddaf8a5af63d72fba76c45"
-  integrity sha512-hKGfqQKK5qVMwW0Sp8l2TiuW8UuHafTvUZNSWBPghedB/rSFbVLlr0mufuEV0iq/pQ7ChW96q/WEC6Llie4SnA==
+matrix-widget-api@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/matrix-widget-api/-/matrix-widget-api-1.6.0.tgz#f0075411edffc6de339580ade7e6e6e6edb01af4"
+  integrity sha512-VXIJyAZ/WnBmT4C7ePqevgMYGneKMCP/0JuCOqntSsaNlCRHJvwvTxmqUU+ufOpzIF5gYNyIrAjbgrEbK3iqJQ==
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.2.0"
@@ -4121,6 +4128,14 @@ object.assign@^4.1.2:
     define-properties "^1.1.3"
     has-symbols "^1.0.1"
     object-keys "^1.1.1"
+
+oidc-client-ts@^2.2.4:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/oidc-client-ts/-/oidc-client-ts-2.4.0.tgz#764c8a33de542026e2798de9849ce8049047d7e5"
+  integrity sha512-WijhkTrlXK2VvgGoakWJiBdfIsVGz6CFzgjNNqZU1hPKV2kyeEaJgLs7RwuiSp2WhLfWBQuLvr2SxVlZnk3N1w==
+  dependencies:
+    crypto-js "^4.2.0"
+    jwt-decode "^3.1.2"
 
 oidc-client-ts@hughns/oidc-client-ts#08ac93b33fd1b021b6771c80397bbc6754fa3b8c:
   version "2.0.5"
