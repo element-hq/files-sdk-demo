@@ -15,7 +15,7 @@ limitations under the License.
 -->
 
 <svelte:head>
-    <title>Login</title>
+    <title>Sign in</title>
 </svelte:head>
 
 <script lang="ts">
@@ -26,25 +26,129 @@ limitations under the License.
     import Button, { Label } from "@smui/button";
     import { Title } from "@smui/paper";
     import CircularProgress from '@smui/circular-progress';
+    import { getLoginFlows, getWellKnown } from '../../auth';
+    import { onDestroy, onMount } from 'svelte';
+    import { getLogger } from 'log4js';
+    import Card from "@smui/card";
+    import QrCode from "svelte-qrcode";
+    import { debounce } from '../../utils';
+    import type { DeviceAuthorizationResponse } from 'oidc-client-ts';
 
     export let clientManager: ClientManager;
+
+    const log = getLogger('Login');
 
     let errorMessage = '';
     let loading = false;
 
-    async function login() {
+    let passwordSupported = false;
+    let oidcSupported = false;
+    let deviceFlowSupported = false;
+
+    let oidcDeviceFlow: DeviceAuthorizationResponse | undefined;
+
+    let homeserverInput = clientManager.homeserverUrl;
+    
+    let loadedServerInfo = '';
+
+    $: params = new URLSearchParams(document.location.search);
+
+    $: (async () => {
+        if (params.has('error_description')) {
+            errorMessage = params.get('error_description') ?? params.get('error') ?? '';
+            window.history.pushState('object', document.title, location.href.split("?")[0]);
+            params = new URLSearchParams(document.location.search);
+            loadedServerInfo = clientManager.homeserverUrl;
+        }
+        if (params.has('code')) {
+            // OIDC in progress?
+        } else if (loadedServerInfo !== clientManager.homeserverUrl) {
+            try {
+                errorMessage = '';
+                passwordSupported = false;
+                oidcSupported = false;
+                deviceFlowSupported = false;
+                clientManager.oidcIssuer = '';
+                try {
+                    const wellKnown = await getWellKnown(clientManager.homeserverUrl);
+                    if (wellKnown['m.homeserver']?.base_url && wellKnown['m.homeserver'].base_url !== clientManager.homeserverUrl) {
+                        clientManager.homeserverUrl = wellKnown['m.homeserver'].base_url;
+                    }
+                    clientManager.oidcIssuer = wellKnown['org.matrix.msc2965.authentication']?.issuer ?? '';
+                    oidcSupported = !!clientManager.oidcIssuer;
+                } catch (e: any) {
+                    // OIDC is not supported as no .well-known
+                    log.warn(e);
+                }
+
+                passwordSupported = (await getLoginFlows(clientManager.homeserverUrl)).flows.some(x => x.type === 'm.login.password');
+
+                if (oidcSupported) {
+                    try {
+                        await clientManager.assertOidcClientId();
+                        deviceFlowSupported = await clientManager.supportsDeviceCode();
+                    } catch (e: any) {
+                        log.warn(e);
+                        oidcSupported = false;
+                        if (!passwordSupported) {
+                            throw new Error(`Homeserver is not compatible with this Matrix client: ${e?.message ?? 'An error occured'}`);
+                        }
+                    }
+                }
+            } catch (e: any) {
+                errorMessage = e?.message ?? 'An error occured';
+            }
+            loadedServerInfo = clientManager.homeserverUrl;
+        }
+    })();
+
+    async function loginWithPassword() {
+        log.info('loginWithPassword()');
         try {
             errorMessage = '';
             loading = true;
-            await clientManager.login();
+            await clientManager.loginWithPassword();
             router.replace('/');
         } catch (e: any) {
-            console.error(e);
+            log.error(e);
             errorMessage = [e.errcode, e.cause?.message ?? e.message].filter(x => !!x).join(': ');
         } finally {
             loading = false;
         }
     }
+
+    async function loginWithOidc(deviceFlow: boolean) {
+        log.info('loginWithOidc()');
+        errorMessage = '';
+        try {
+            if (deviceFlow) {
+                oidcDeviceFlow = await clientManager.startLoginWithOidcDeviceFlow();
+                await clientManager.waitForLoginWithOidcDeviceFlow();
+                oidcDeviceFlow = undefined;
+            } else {
+                await clientManager.loginWithOidcNormalFlow();
+            }
+        } catch (e: any) {
+            log.warn(e);
+            errorMessage = `Unable to sign in: ${e.error_description ?? e.error ?? e.message ?? 'An error occurred'}`;
+        }
+    }
+    
+    const debouncedHomeserver = debounce(() => clientManager.homeserverUrl = homeserverInput, 250);
+
+    onMount(async () => {
+        log.debug('onMount()');
+		if (params.has('error')) {
+            log.warn(`Received OIDC error: ${params.get('error_description') ?? params.get('error')}`)
+            errorMessage =(params.get('error_description') ?? params.get('error')) ?? 'An error occurred';
+        } else if (params.has('code')) {
+            await clientManager.completeOidcLogin();
+        } else if (params.has('state')) {
+
+        }
+    });
+
+    onDestroy(() => log.debug('onDestroy()'));
 </script>
 
 <div>
@@ -53,34 +157,84 @@ limitations under the License.
         <strong>Please use a dedicated test account. The homeserver also needs to allow high request rates.</strong>
     </p>
 
-    {#if errorMessage}
-        <p style="color: red; text-align: center; font-weight: bold;">
-            {errorMessage}
-        </p>
-    {/if}
-
-    <form on:submit|preventDefault={() => login()}>
-        <Textfield variant="outlined" label="Homeserver" type="text" bind:value={clientManager.homeserverUrl} required style="margin-top: 16px;">
-            <HelperText slot="helper">e.g. https://matrix.org</HelperText>
-        </Textfield>
-        <Textfield variant="outlined" label="Username" type="text" bind:value={clientManager.userId} required style="margin-top: 16px;">
-            <HelperText slot="helper">Your matrix username</HelperText>
-        </Textfield>
-        <Textfield variant="outlined" label="Password" type="password" bind:value={clientManager.password} required style="margin-top: 16px;">
-            <HelperText slot="helper">Your matrix password</HelperText>
-        </Textfield>
-        <Button type="submit" variant="unelevated" disabled={loading}>
-            Sign in
-            {#if loading}
-                <CircularProgress indeterminate style="height: 24px; width: 24px; margin-left: 8px;" />
+    <form on:submit|preventDefault={() => {}}>
+        <Card padded style="max-width: 500px">
+            <Textfield variant="outlined" label="Homeserver" type="text" bind:value={homeserverInput} on:keyup={debouncedHomeserver} required style="margin-top: 16px;">
+                <HelperText slot="helper">e.g. https://matrix.org</HelperText>
+            </Textfield>
+            {#if errorMessage}
+                <p style="color: red; text-align: center; font-weight: bold;">
+                    {errorMessage}
+                </p>
             {/if}
-        </Button>
-        <p>
-            New?
-            <Button on:click:preventDefault={() => router.show('/register')} href="#">
-                <Label>Create account</Label>
-            </Button>
-        </p>
+            {#if oidcDeviceFlow}
+                <div style="text-align: center">
+                    {#if oidcDeviceFlow.verification_uri_complete}
+                        <p>Scan this code on your other device to continue sign in</p>
+                        <div>
+                            <QrCode value={oidcDeviceFlow.verification_uri_complete} />                        
+                        </div>
+                    {/if}
+                    <p>{oidcDeviceFlow.verification_uri_complete ? 'or go' : 'Go'} to:</p>
+                    <p><strong>{oidcDeviceFlow.verification_uri}</strong></p>
+                    <p>and enter code:</p>
+                    <p><strong>{oidcDeviceFlow.user_code}</strong></p>
+
+                    <p>Changed your mind?</p>
+                    <Button variant="unelevated" disabled={loading} on:click={() => loginWithOidc(false)}>
+                        Continue on this device
+                        {#if loading}
+                            <CircularProgress indeterminate style="height: 24px; width: 24px; margin-left: 8px;" />
+                        {/if}                  
+                    </Button>
+    
+                </div>
+            {:else if oidcSupported}
+                <p>
+                    Homeserver { clientManager.homeserverUrl } supports auth via OIDC:
+                </p>
+                {#if deviceFlowSupported }
+                    <p>
+                        Already signed in on another device? You can use it to complete sign in
+                    </p>
+                    <Button variant="unelevated" disabled={loading} on:click={() => loginWithOidc(true)}>
+                        Use another device
+                        {#if loading}
+                            <CircularProgress indeterminate style="height: 24px; width: 24px; margin-left: 8px;" />
+                        {/if}                  
+                    </Button>
+                    <p style="text-align: center">or:</p>
+                {/if}
+                <Button variant="unelevated" disabled={loading} on:click={() => loginWithOidc(false)}>
+                    {deviceFlowSupported ? 'Continue on this device' : 'Continue'}
+                    {#if loading}
+                        <CircularProgress indeterminate style="height: 24px; width: 24px; margin-left: 8px;" />
+                    {/if}                  
+                </Button>
+            {:else if passwordSupported}
+                <p>
+                    Homeserver { clientManager.homeserverUrl } supports auth via Matrix password:
+                </p>
+                <Textfield variant="outlined" label="Username" type="text" bind:value={clientManager.userId} required style="margin-top: 16px;">
+                    <HelperText slot="helper">Your matrix username</HelperText>
+                </Textfield>
+                <Textfield variant="outlined" label="Password" type="password" bind:value={clientManager.password} required style="margin-top: 16px;">
+                    <HelperText slot="helper">Your matrix password</HelperText>
+                </Textfield>
+                <Button type="submit" variant="unelevated" disabled={loading} on:click={() => loginWithPassword()}>
+                    Sign in with HS password
+                    {#if loading}
+                        <CircularProgress indeterminate style="height: 24px; width: 24px; margin-left: 8px;" />
+                    {/if}
+                </Button>        
+            {/if}
+            <p>
+                Not got an account?
+                <Button on:click:preventDefault={() => router.show('/register')} href="#">
+                    <Label>Register</Label>
+                </Button>
+            </p>
+        </Card>
         <p>
             <i>It is recommended to use a dedicated test account as the E2E encryption settings used in this beta version may clash with your existing account and your keys get lost.</i>
         </p>
