@@ -40,7 +40,8 @@ exports.page = ({ title }) => ({
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="icon" type="image/png" href="favicon.png">
         <link rel="stylesheet" href="global.css">
-        <script src="olm/olm.js"></script>`,
+        <script src="olm/olm.js"></script>
+        <script>Olm.init().then(() => {}).catch(e => console.error(e));</script>`
     },
   })]
 })
