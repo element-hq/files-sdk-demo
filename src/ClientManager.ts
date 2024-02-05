@@ -208,8 +208,6 @@ export class ClientManager {
                 client_name: "Files SDK Demo",
                 logo_uri: new URL("logo.svg", this.client_uri).href,
                 client_uri: this.client_uri,
-                tos_uri: "https://element.io/terms-of-service",
-                policy_uri: "https://element.io/privacy",
                 response_types: ["code"],
                 grant_types,
                 redirect_uris: [this.redirect_uri],
