@@ -49,6 +49,8 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
+      - name: Docker build
+        run: docker build .
 
   deploy-demo:
     name: Deploy demo site
