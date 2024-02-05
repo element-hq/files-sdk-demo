@@ -59,7 +59,7 @@
     "@smui/list": "^5.0.1",
     "@smui/menu": "^5.0.1",
     "@smui/menu-surface": "^5.0.1",
-    "@smui/paper": "^5.0.1",
+    "@smui/paper": "^6.1.4",
     "@smui/select": "^5.0.1",
     "@smui/textfield": "^5.0.1",
     "@smui/top-app-bar": "^5.0.1",
