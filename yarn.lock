@@ -720,10 +720,10 @@
     "@material/theme" "^13.0.0"
     tslib "^2.1.0"
 
-"@matrix-org/matrix-sdk-crypto-wasm@^3.0.1":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.1.0.tgz#38d8707dd5bdad4e98a0a66bf266accfc401b3cd"
-  integrity sha512-jFl8jeL16u9pyo1NIdg6US4r+Srm7KixL+cMYVbRG8EwB4UpF4Bt+3TdBUhWGbVc1Qte1htdBjPs8ZB+gZWkYw==
+"@matrix-org/matrix-sdk-crypto-wasm@^3.4.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@matrix-org/matrix-sdk-crypto-wasm/-/matrix-sdk-crypto-wasm-3.6.0.tgz#385aa579d7b7546d85c9b20bf6ba780f799bdda3"
+  integrity sha512-fvuYczcp/r/MOkOAUbK+tMaTerEe7/QHGQcRJz3W3JuEma0YN59d35zTBlts7EkN6Ichw1vLSyM+GkcbuosuyA==
 
 "@matrix-org/olm@https://gitlab.matrix.org/api/v4/projects/27/packages/npm/@matrix-org/olm/-/@matrix-org/olm-3.2.13.tgz":
   version "3.2.13"
@@ -3708,13 +3708,13 @@ matrix-files-sdk@^3.1.0:
     matrix-encrypt-attachment "^1.0.3"
     p-retry "^4.5.0"
 
-matrix-js-sdk@^30.1.0:
-  version "30.1.0"
-  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.1.0.tgz#5ab8caf933ddc646ffd1076c5ce6b5d48376d392"
-  integrity sha512-QhYAMD6kD6vE3DLsbEnPVLmvk8LQrGIMvVEnQGOkBq3eUjg0r49gZEtDeRbCfOVwFO1hoTfxIgm6CfqG0l5AAg==
+matrix-js-sdk@^30.3.0:
+  version "30.3.0"
+  resolved "https://registry.yarnpkg.com/matrix-js-sdk/-/matrix-js-sdk-30.3.0.tgz#f7046da2d6d6403c84aac46b16772248e068fb9e"
+  integrity sha512-yqAn1IhvrSxvqRP4UMToaWhtA/iC6FYTt4qj5K8H3BmAQDOqObw9qPLm43HmdbsBGk6VUwz9szgNblhVyq0sKg==
   dependencies:
     "@babel/runtime" "^7.12.5"
-    "@matrix-org/matrix-sdk-crypto-wasm" "^3.0.1"
+    "@matrix-org/matrix-sdk-crypto-wasm" "^3.4.0"
     another-json "^0.2.0"
     bs58 "^5.0.0"
     content-type "^1.0.4"
