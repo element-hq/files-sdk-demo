@@ -1,4 +1,4 @@
-FROM node:18-alpine as builder
+FROM --platform=${BUILDPLATFORM} node:20-alpine as builder
 
 ARG DEFAULT_HOMESERVER
 
@@ -13,6 +13,6 @@ COPY tsconfig.json webpack.config.js webpack.parts.js ./
 ENV DEFAULT_HOMESERVER ${DEFAULT_HOMESERVER}
 RUN yarn build
 
-FROM nginxinc/nginx-unprivileged:1.21-alpine
+FROM --platform=${TARGETPLATFORM} nginxinc/nginx-unprivileged:1-alpine
 
 COPY --from=builder /files-sdk-demo/dist /usr/share/nginx/html
