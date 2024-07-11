@@ -430,7 +430,9 @@ export class ClientManager {
         this.deviceId = this.client.deviceId ?? '';
         this.userId = this.client.getUserId() ?? '';
 
-        await this.wrapForbidden(this.bootstrap);
+        await this.wrapForbidden(async () => {
+            await this.bootstrap();
+        });
     }
 
     public async register() {
